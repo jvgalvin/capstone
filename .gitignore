@@ -1,0 +1,5 @@
+# Ingore Martin's personal virtual environment for VS Code
+/.venv
+
+# Ignore unnecessary checkpoints
+/notebooks/.ipynb_checkpoints/
