@@ -15,6 +15,9 @@ notebook = "^7.0.3"
 pandas = "^2.1.0"
 pandas-plink = "^2.2.9"
 matplotlib = "^3.7.2"
+numpy = "^1.24.3"
+jupyternotify = "^0.1.15"
+tensorflow = "^2.13.0"
 
 [build-system]
 requires = ["poetry-core"]

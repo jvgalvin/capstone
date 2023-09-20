@@ -3,3 +3,5 @@
 
 # Ignore unnecessary checkpoints
 /notebooks/.ipynb_checkpoints/
+/data/Data*
+*.DS_Store
