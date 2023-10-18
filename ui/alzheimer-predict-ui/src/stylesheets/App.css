@@ -1,0 +1,18 @@
+.container {
+  padding: 2rem;
+  display: flex;
+}
+
+h2 {
+  color: #248f8f;
+}
+
+.form-data {
+  display: grid;
+}
+
+.submit-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
