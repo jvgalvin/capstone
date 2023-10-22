@@ -7,15 +7,18 @@ import TextNumberInput from './inputs/TextNumberInput.js';
 import ResultInput from './inputs/ResultInput';
 import ImagesInput from './inputs/ImagesInput';
 import SearchBar from './inputs/SearchBar';
+import { getPatientHistory } from './DatabaseConnection.js';
 
 function App() {
 
   // TextNumberInput value updates to have submit form include all values needed.
   const [inputs, setInputs] = useState({}); //Used for input values
-  const resultValue = useRef(); //Used for AD Probability Result
+  const adProbability = useRef(); //Used for AD Probability Result
   const [selectedFiles, setSelectedFiles] = useState([]); //Used for storing file names
   const selectedFilesRef = useRef();
   const [patient, setPatient] = useState({});
+  const [history, setHistory] = useState([]);
+
   const alleles = useRef();
   const mmse = useRef();
   const age = useRef();
@@ -24,24 +27,29 @@ function App() {
   const race = useRef();
 
   //Handle finding Patient
-  const handleFoundPatient = (suggestion) => {
+  const handleFoundPatient = async (patient) => {
     console.log("HERE");
-    console.log(suggestion["suggestion"]);
+    console.log(patient);
+    let history = await getPatientHistory(patient["suggestion"]["id"]);
+    console.log(history)
+    setHistory(history["records"]);
     setInputs({
-      "alleles": suggestion["suggestion"]["alleles"],
-      "mmse": suggestion["suggestion"]["mmse"],
-      "age": suggestion["suggestion"]["age"],
-      "gender": suggestion["suggestion"]["gender"],
-      "education": suggestion["suggestion"]["education"],
-      "race": suggestion["suggestion"]["race"],
+      "alleles": history["records"][0]["alleles"],
+      "mmse": history["records"][0]["mmse"],
+      "age": history["records"][0]["age"],
+      "gender": history["records"][0]["gender"],
+      "education": history["records"][0]["education"],
+      "race": history["records"][0]["race"],
+      "ad_probability": history["records"][0]["ad_probability"]
     });
-    alleles.current.value = suggestion["suggestion"]["alleles"]
-    mmse.current.value = suggestion["suggestion"]["mmse"]
-    age.current.value = suggestion["suggestion"]["age"]
-    gender.current.value = suggestion["suggestion"]["gender"]
-    education.current.value = suggestion["suggestion"]["education"]
-    race.current.value = suggestion["suggestion"]["race"]
-    setPatient(suggestion["suggestion"]);
+    alleles.current.value = history["records"][0]["alleles"]
+    mmse.current.value = history["records"][0]["mmse"]
+    age.current.value = history["records"][0]["age"]
+    gender.current.value = history["records"][0]["gender"]
+    education.current.value = history["records"][0]["education"]
+    race.current.value = history["records"][0]["race"]
+    adProbability.current.value = (history["records"][0]["ad_probability"] > -1) ? history["records"][0]["ad_probability"] : undefined
+    setPatient(patient);
   }
 
   //Handle input changes
@@ -76,7 +84,7 @@ function App() {
         console.log(key + " value: " + inputs[key]);
       }
       alert(inputs)
-      resultValue.current.value = 71;
+      adProbability.current.value = 71;
     }
   }
 
@@ -104,7 +112,15 @@ function App() {
         </form>
       </div>
       <div>
-        <ResultInput resultValue={resultValue} />
+        <h2>Patient History</h2>
+        <div>
+        {history.map((item) => (
+                <p>
+                    alleles: {item["alleles"]}, mmse: {item["alleles"]}, age: {item["age"]}, gender: {item["gender"]}, education: {item["education"]}, race: {item["race"]}, ad_probability: {item["ad_probability"]}
+                </p>
+            ))}
+        </div>
+        <ResultInput resultValue={adProbability} />
       </div>
     </div>
   );

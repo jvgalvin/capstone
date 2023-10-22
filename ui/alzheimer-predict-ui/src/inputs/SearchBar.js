@@ -1,26 +1,16 @@
 import { useState } from 'react';
+import { getPatientByNameID } from '../DatabaseConnection.js';
 
 function SearchBar({handleFoundPatient}) {
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
 
-    const getPatientByNameID = (value) => {
-        fetch(`http://127.0.0.1:8000/patient?name=${value}`)
-            .then((response) => response.json())
-            .then((patient) => {
-                console.log(patient);
-                setSuggestions([patient]);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    }
-
     const fetchData = async (value) => {
         console.log(value.length)
         if (value.length >= 2) {
             try {
-                await getPatientByNameID(value);
+                let patient = await getPatientByNameID(value);
+                setSuggestions([patient])
             } catch (error) {
             console.log(error);
             }

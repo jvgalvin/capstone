@@ -1,21 +1,21 @@
-const { Client } = require('pg');
-
-async function connectToDB() {
-    const client = new Client({
-        host: 'localhost',
-        database: 'alzheimer_predict',
-        user: 'alzheimer_predict_user',
-        password: '12345678',
-        port: '5432',
-        ssl: false
-    });
-    await client.connect();
-    return client
+export function getPatientByNameID(value) {
+    return fetch(`http://127.0.0.1:8000/patient?name=${value}`)
+        .then((response) => response.json())
+        .then((patient) => {
+            return patient
+        })
+        .catch((err) => {
+            console.log(err.message);
+        })
 }
 
-async function getPatientByName(patient_name) {
-    const client = connectToDB();
-    let res = await client.query('SELECT * FROM patients WHERE patient_name=$1', `${patient_name}`);
-    console.log(res.rows[0].connected);
-    await client.end();
+export function getPatientHistory(id) {
+    return fetch(`http://127.0.0.1:8000/patient/record?patient_id=${id}`)
+        .then((response) => response.json())
+        .then((history) => {
+            return history
+        })
+        .catch((err) => {
+            console.log(err.message);
+        })
 }
