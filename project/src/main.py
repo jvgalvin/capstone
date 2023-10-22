@@ -69,7 +69,7 @@ def patient(patient: str | None = None):
 @app.get("/patient/record", response_model=Records)
 def record(patient_id: int):
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM records WHERE patient_id='{}';".format(patient_id))
+    cursor.execute("SELECT * FROM records WHERE patient_id='{}' ORDER BY updated_at DESC;".format(patient_id))
     records = cursor.fetchall()
     if (records == []):
         raise HTTPException(status_code=404, detail="Patient History Not Found")
