@@ -1,4 +1,4 @@
-ARG APP_DIR=/capstone
+ARG APP_DIR=/capstone/project
 
 # Build  image
 FROM python:3.11-slim AS build
@@ -15,8 +15,9 @@ ENV POETRY_VERSION=1.4.2
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH /root/.local/bin:$PATH
 
+# Copy all files
 WORKDIR ${APP_DIR}
-COPY ./project/pyproject.toml ./
+COPY ./ ./
 
 RUN python -m venv --copies ${APP_DIR}/venv
 RUN . ${APP_DIR}/venv/bin/activate
@@ -37,26 +38,4 @@ RUN npm --version
 # Install PG for node JS
 RUN npm install pg
 
-CMD ["bash", "setup-db.sh"]
-
-# CMD ["poetry", "run", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
-
-# # Run image
-# FROM python:3.11-slim as run
-# ARG APP_DIR
-
-# WORKDIR ${APP_DIR}/
-
-# # COPY ./notebooks ./notebooks
-
-# COPY --from=build ${APP_DIR} ${APP_DIR}
-# ENV PATH ${APP_DIR}/venv/bin:$PATH
-# # RUN . ${APP_DIR}/venv/bin/activate && poetry install --no-dev
-
-
-# # COPY . ./
-# COPY ./notebooks ./notebooks
-
-# HEALTHCHECK CMD curl -f http://localhost:8000/health || exit 1
-
-# CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "src.main:app"]
