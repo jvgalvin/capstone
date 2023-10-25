@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 import psycopg2
 import json
+import joblib
 
 app = FastAPI()
 app.add_middleware(
@@ -14,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_predict_user", password="12345678", host="localhost", port=5432)
-
+model = joblib.load("/workspaces/capstone/project/src/model.pkl")
 class Patient(BaseModel):
     id: int
     patient_name: Optional[str] = None
