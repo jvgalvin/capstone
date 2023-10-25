@@ -1,21 +1,10 @@
-# Works on Python 3.8
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
-
-import joblib
-import json
-import numpy as np
-import os
-import os.path
-import pandas as pd
 import psycopg2
+import json
 
 app = FastAPI()
-
-model = None
-model = joblib.load("/workspaces/capstone/project/src/model.pkl")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -27,18 +16,20 @@ connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_pred
 
 class Patient(BaseModel):
     id: int
-    patient_name: Optional[str] = None
+    patient_name: str
     created_at: str
 
 class Record(BaseModel):
     id: int
     patient_id: int
-    alleles: int
-    mmse: int
-    age: int
-    gender: str
-    education: int
-    race: str
+    Diagnosis_at_Baseline: str
+    APOE4: int
+    MMSE: int
+    Age: float
+    Gender: str
+    Years_of_Education: int
+    Ethnicity: str
+    Race: str
     ad_probability: int
     created_at: str
     updated_at: str
@@ -46,8 +37,20 @@ class Record(BaseModel):
 class Records(BaseModel):
     records = [Record]
 
+class InputRecord(BaseModel):
+    patient_id: int
+    Diagnosis_at_Baseline: str
+    APOE4: int
+    MMSE: int
+    Age: float
+    Gender: str
+    Years_of_Education: int
+    Ethnicity: str
+    Race: str
+    ad_probability: int
+
 @app.get("/patient", response_model=Patient)
-def patient(name: str = None):
+def patient(name: str | None = None):
     if name == None or name.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
     
@@ -60,7 +63,7 @@ def patient(name: str = None):
     return patient_record
 
 @app.post("/patient", status_code=201)
-def patient(patient: str = None):
+def patient(patient: str | None = None):
     if patient == None or patient.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
     cursor = connection.cursor()
@@ -80,7 +83,7 @@ def patient(patient: str = None):
 @app.get("/patient/record", response_model=Records)
 def record(patient_id: int):
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM records WHERE patient_id='{}' ORDER BY updated_at DESC;".format(patient_id))
+    cursor.execute("SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability, created_at, updated_at FROM records WHERE patient_id='{}' ORDER BY updated_at DESC;".format(patient_id))
     records = cursor.fetchall()
     if (records == []):
         raise HTTPException(status_code=404, detail="Patient History Not Found")
@@ -88,43 +91,59 @@ def record(patient_id: int):
     for record in records:
         final_record = Record(id=record[0],
                               patient_id=record[1],
-                              alleles=record[2],
-                              mmse=record[3],
-                              age=record[4],
-                              gender=record[5],
-                              education=record[6],
-                              race=record[7],
-                              ad_probability=record[8] if record[8] is not None else -1,
-                              created_at=record[9].isoformat(),
-                              updated_at=record[10].isoformat())
+                              Diagnosis_at_Baseline=record[2],
+                              APOE4=record[3],
+                              MMSE=record[4],
+                              Age=record[5],
+                              Gender=record[6],
+                              Years_of_Education=record[7],
+                              Ethnicity=record[8],
+                              Race=record[9],
+                              ad_probability=record[10] if record[10] is not None else -1,
+                              created_at=record[11].isoformat(),
+                              updated_at=record[12].isoformat())
         final_records.append(final_record)
     return Records(records=final_records)
 
 @app.post("/patient/record", status_code=201)
-def record(patient_id: int,
-            alleles: int,
-            mmse: int,
-            age: int,
-            gender: str,
-            education: int,
-            race: str,
-            ad_probability: int):
+def record(new_record: InputRecord):
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM records WHERE patient_id='{}' and alleles={} and mmse={} and age={};".format(patient_id, alleles, mmse, age))
+    cursor.execute("SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability FROM records WHERE patient_id='{}' and Diagnosis_at_Baseline='{}' and APOE4={} and MMSE={} and Age={} ORDER BY created_at ASC LIMIT 1;".format(new_record.patient_id, new_record.Diagnosis_at_Baseline, new_record.APOE4, new_record.MMSE, new_record.Age))
     records = cursor.fetchall()
-    print(records)
     if (records != []):
         raise HTTPException(status_code=400, detail="Record already exists")
+    
+    ## Get Patient to get Image Array from
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM records WHERE patient_id='1' ORDER BY created_at ASC LIMIT 1;")
+    original_record = cursor.fetchall()
+    ## Get Columns to create insert query
+    cursor = connection.cursor()
+    cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'records' order by ordinal_position ASC;")
+    columns = cursor.fetchall()
+    insert_query = "INSERT INTO records("
+    for column in columns:
+        if column[0] != "id" and column[0] != "created_at" and column[0] != "updated_at":
+            insert_query = insert_query + column[0] + ","
+    insert_query = insert_query[:len(insert_query)-1]
+    insert_query = insert_query + ") VALUES("
+    insert_query = insert_query + str(new_record.patient_id) + ","
+    insert_query = insert_query + "'" + str(new_record.Diagnosis_at_Baseline) + "',"
+    insert_query = insert_query + str(new_record.APOE4) + ","
+    insert_query = insert_query + str(new_record.MMSE) + ","
+    insert_query = insert_query + str(new_record.Age) + ","
+    insert_query = insert_query + "'" + str(new_record.Gender) + "',"
+    insert_query = insert_query + str(new_record.Years_of_Education) + ","
+    insert_query = insert_query +  "'" + str(new_record.Ethnicity) + "',"
+    insert_query = insert_query +  "'" + str(new_record.Race) + "',"
+    insert_query = insert_query + str(new_record.ad_probability) + ","
+    for value in range(11, len(original_record[0]) - 2):
+        insert_query = insert_query + str(original_record[0][value]) + ","
+    insert_query = insert_query[:len(insert_query)-1]
+    insert_query = insert_query + ");"
     try:
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO records(patient_id, alleles, mmse, age, gender, education, race, ad_probability) VALUES({}, {}, {}, {}, '{}', {}, '{}', {});".format(patient_id,
-                                                                                                                                                                        alleles,
-                                                                                                                                                                        mmse,
-                                                                                                                                                                        age,
-                                                                                                                                                                        gender,
-                                                                                                                                                                        education,
-                                                                                                                                                                        race,
-                                                                                                                                                                        ad_probability))
+        cursor.execute(insert_query)
         connection.commit()
     except:
         connection.rollback()
