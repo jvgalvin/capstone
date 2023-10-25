@@ -1,7 +1,8 @@
 ARG APP_DIR=/capstone
 
 # Build  image
-FROM python:3.11-slim AS build
+#FROM python:3.11-slim AS build
+FROM tensorflow/tensorflow:2.11.1-gpu AS build
 ARG APP_DIR
 
 RUN apt-get update \
@@ -20,7 +21,7 @@ COPY ./project/pyproject.toml ./
 
 RUN python -m venv --copies ${APP_DIR}/venv
 RUN . ${APP_DIR}/venv/bin/activate
-RUN poetry install
+# RUN poetry install
 
 # Install node JS in container
 ENV NODE_VERSION=16.13.0
@@ -35,7 +36,10 @@ RUN node --version
 RUN npm --version
 
 # Install PG for node JS
-RUN npm install pg
+# RUN npm install pg
+
+COPY ./setup-db.sh ./
+COPY ./ui/alzheimer-predict-ui/src/setup.js ./ui/alzheimer-predict-ui/src/
 
 CMD ["bash", "setup-db.sh"]
 

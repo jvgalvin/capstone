@@ -1,6 +1,8 @@
+# Works on Python 3.8
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import Optional
 
 import joblib
 import json
@@ -25,7 +27,7 @@ connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_pred
 
 class Patient(BaseModel):
     id: int
-    patient_name: str
+    patient_name: Optional[str] = None
     created_at: str
 
 class Record(BaseModel):
@@ -45,7 +47,7 @@ class Records(BaseModel):
     records = [Record]
 
 @app.get("/patient", response_model=Patient)
-def patient(name: str | None = None):
+def patient(name: str = None):
     if name == None or name.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
     
@@ -58,7 +60,7 @@ def patient(name: str | None = None):
     return patient_record
 
 @app.post("/patient", status_code=201)
-def patient(patient: str | None = None):
+def patient(patient: str = None):
     if patient == None or patient.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
     cursor = connection.cursor()
