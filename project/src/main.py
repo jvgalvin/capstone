@@ -2,13 +2,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from tensorflow.keras.callbacks import EarlyStopping
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler
-from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import precision_recall_curve, auc, accuracy_score, classification_report
-from imblearn.over_sampling import RandomOverSampler
-
 import joblib
 import json
 import numpy as np
@@ -16,10 +9,11 @@ import os
 import os.path
 import pandas as pd
 import psycopg2
-import tensorflow as tf
 
 app = FastAPI()
-model = joblib.load("/workspaces/capstone/project/src/model.pkl") # Load model
+
+model = None
+model = joblib.load("/workspaces/capstone/project/src/model.pkl")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
