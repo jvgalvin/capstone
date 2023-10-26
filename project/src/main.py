@@ -15,7 +15,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_predict_user", password="12345678", host="localhost", port=5432)
+
+# Import Model-related objects
 model = joblib.load("/workspaces/capstone/project/src/model.pkl")
+scaler = joblib.load("/workspaces/capstone/project/src/scaler.gz")
+label_encoder = joblib.load("/workspaces/capstone/project/src/label_encoder.gz")
+
 class Patient(BaseModel):
     id: int
     patient_name: Optional[str] = None
