@@ -38,6 +38,10 @@ RUN npm --version
 # Install PG for node JS
 # RUN npm install pg
 
+# Install python requirements
+COPY ./requirements.txt ./
+RUN pip install -r requirements.txt
+
 COPY ./setup-db.sh ./
 COPY ./ui/alzheimer-predict-ui/src/setup.js ./ui/alzheimer-predict-ui/src/
 

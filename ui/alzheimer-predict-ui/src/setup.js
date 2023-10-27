@@ -2,7 +2,7 @@ const { Client } = require('pg');
 
 const patient_data = [
     {
-        "patient_name": "Patient One",
+        "patient_name": "Patient_One",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 2,
         "MMSE": 24,
@@ -14,7 +14,7 @@ const patient_data = [
         "ad_probability": -1
     },
     {
-        "patient_name": "Patient Two",
+        "patient_name": "Patient_Two",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 1,
         "MMSE": 15,
@@ -26,7 +26,7 @@ const patient_data = [
         "ad_probability": 71
     },
     {
-        "patient_name": "Patient Three",
+        "patient_name": "Patient_Three",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 2,
         "MMSE": 20,
@@ -38,7 +38,7 @@ const patient_data = [
         "ad_probability": 80
     },
     {
-        "patient_name": "Patient Four",
+        "patient_name": "Patient_Four",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 1,
         "MMSE": 24,
@@ -50,7 +50,7 @@ const patient_data = [
         "ad_probability": -1
     },
     {
-        "patient_name": "Patient Five",
+        "patient_name": "Patient_Five",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 3,
         "MMSE": 30,

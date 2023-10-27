@@ -36,6 +36,9 @@ RUN node --version
 RUN npm --version
 
 # Install PG for node JS
-RUN npm install pg
+# RUN npm install pg
+
+# Install python requirements
+RUN pip install -r requirements.txt
 
 CMD ["poetry", "run", "uvicorn", "src.main:app"]
