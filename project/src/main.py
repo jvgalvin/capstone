@@ -181,30 +181,28 @@ POS_GENDER = 2
 POS_ETHNICITY = 4
 POS_RACE = 5
 
-
 def db_tuple_to_numpy(input_tuple):
     # Convert Tuple to mutable list
     value_list = list(input_tuple)
     
     # Remove values not part of prediction input
-    # value_list.pop(161)
-    # value_list.pop(161)
-    # value_list.pop(0)
-    # value_list.pop(0)
-    # value_list.pop(1)
-    # value_list.pop(1)
+    value_list.pop(161)
+    value_list.pop(161)
+    value_list.pop(0)
+    value_list.pop(0)
+    value_list.pop(0)
     
     # Transform "Diagnosis_at_Baseline", "Gender", "Ethnicity", and "Race" with label_encoder.gz (should be able to do joblib.load('label_encoder.gz')
-    # value_list[POS_DIAGNOSIS] = encoder_dx.transform([value_list[POS_DIAGNOSIS]])[0]
-    # value_list[POS_GENDER] = encoder_gender.transform([value_list[POS_GENDER]])[0]
-    # value_list[POS_ETHNICITY] = encoder_eth.transform([value_list[POS_ETHNICITY]])[0]
-    # value_list[POS_RACE] = encoder_race.transform([value_list[POS_RACE]])[0]
+    value_list[POS_DIAGNOSIS] = encoder_dx.transform([value_list[POS_DIAGNOSIS]])[0]
+    value_list[POS_GENDER] = encoder_gender.transform([value_list[POS_GENDER]])[0]
+    value_list[POS_ETHNICITY] = encoder_eth.transform([value_list[POS_ETHNICITY]])[0]
+    value_list[POS_RACE] = encoder_race.transform([value_list[POS_RACE]])[0]
     
     # Scale the data in the json request (can use joblib.load('scaler.gz'). Note that you may have to reshape since it's a single sample
-    # feature_array = np.array(value_list).reshape(1,-1)
-    # features_scaled = scaler.transform(feature_array)
+    feature_array = np.array(value_list).reshape(1,-1)
+    features_scaled = scaler.transform(feature_array)
     
-    return len(value_list)
+    return features_scaled
 
 def json_to_numpy(json_string):
     """This method converts the JSON response of the DB to a numpy array for the model to ingest for prediction"""
@@ -227,10 +225,10 @@ def json_to_numpy(json_string):
 # TODO: Delete this when the DB code is running well
 # Testing on GET for now
 @app.get("/predict")
-async def predict(name: str = None):
-    # Test
+async def predict(id: str = None):
+    # Pull Record for model
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM records WHERE id='{}';".format("1"))
+    cursor.execute("SELECT * FROM records WHERE id='{}';".format(id))
     record = cursor.fetchone()
     
     message = "No record found by query!"
@@ -238,12 +236,12 @@ async def predict(name: str = None):
         message = str(record)
         
     # Convert JSON string to model input
-    # arr = db_tuple_to_numpy(record)
+    arr = db_tuple_to_numpy(record)
     
     # Generate prediction
-    # prediction = model.predict(arr)
+    prediction = model.predict(arr)
     
-    return {"message": f"Prediction: {str(message)}"}
+    return {"message": f"Prediction: {str(prediction)}"}
 
 @app.get("/")
 def root():
