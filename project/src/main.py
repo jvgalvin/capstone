@@ -22,7 +22,10 @@ connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_pred
 # Import Model-related objects
 model = joblib.load("/workspaces/capstone/project/src/model.pkl")
 scaler = joblib.load("/workspaces/capstone/project/src/scaler.gz")
-label_encoder = joblib.load("/workspaces/capstone/project/src/label_encoder.gz")
+encoder_dx = joblib.load("/workspaces/capstone/project/src/encoder_dx.gz")
+encoder_eth = joblib.load("/workspaces/capstone/project/src/encoder_eth.gz")
+encoder_gender = joblib.load("/workspaces/capstone/project/src/encoder_gender.gz")
+encoder_race = joblib.load("/workspaces/capstone/project/src/encoder_race.gz")
 
 # TODO: DELETE THIS WHEN THE DB IS WORKING!!!
 json_string = """
@@ -174,23 +177,18 @@ def json_to_numpy(json_string):
     # Convert to dict
     json_obj = json.loads(json_string)
     
-    # Turn json object into a Data Frame to allow encoding
-    df = pd.json_normalize(json_obj)
-    
     # Transform "Diagnosis_at_Baseline", "Gender", "Ethnicity", and "Race" with label_encoder.gz (should be able to do joblib.load('label_encoder.gz')
-    df["Diagnosis_at_Baseline"] = label_encoder.fit_transform(df["Diagnosis_at_Baseline"])
-    df["Gender"] = label_encoder.fit_transform(df["Gender"])
-    df["Ethnicity"] = label_encoder.fit_transform(df["Ethnicity"])
-    df["Race"] = label_encoder.fit_transform(df["Race"])
+    json_obj["Diagnosis_at_Baseline"] = encoder_dx.transform([json_obj["Diagnosis_at_Baseline"]])[0]
+    json_obj["Gender"] = encoder_gender.transform([json_obj["Gender"]])[0]
+    json_obj["Ethnicity"] = encoder_eth.transform([json_obj["Ethnicity"]])[0]
+    json_obj["Race"] = encoder_race.transform([json_obj["Race"]])[0]
     
     # Scale the data in the json request (can use joblib.load('scaler.gz'). Note that you may have to reshape since it's a single sample
-    df = scaler.transform(df)
-    
-    # Convert to array
-    arr = np.array(df)
+    feature_array = np.array(list(json_obj.values())).reshape(1,-1)
+    features_scaled = scaler.transform(feature_array)
     
     # Return array
-    return arr
+    return features_scaled
 
 # TODO: Delete this when the DB code is running well
 # Testing on GET for now
