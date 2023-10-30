@@ -34,20 +34,20 @@ function App() {
     console.log(history)
     setHistory(history["records"]);
     setInputs({
-      "alleles": history["records"][0]["alleles"],
-      "mmse": history["records"][0]["mmse"],
-      "age": history["records"][0]["age"],
-      "gender": history["records"][0]["gender"],
-      "education": history["records"][0]["education"],
-      "race": history["records"][0]["race"],
+      "alleles": history["records"][0]["APOE4"],
+      "mmse": history["records"][0]["MMSE"],
+      "age": history["records"][0]["Age"],
+      "gender": history["records"][0]["Gender"],
+      "education": history["records"][0]["Years_of_Education"],
+      "race": history["records"][0]["RAce"],
       "ad_probability": history["records"][0]["ad_probability"]
     });
-    alleles.current.value = history["records"][0]["alleles"]
-    mmse.current.value = history["records"][0]["mmse"]
-    age.current.value = history["records"][0]["age"]
-    gender.current.value = history["records"][0]["gender"]
-    education.current.value = history["records"][0]["education"]
-    race.current.value = history["records"][0]["race"]
+    alleles.current.value = history["records"][0]["APOE4"]
+    mmse.current.value = history["records"][0]["MMSE"]
+    age.current.value = history["records"][0]["Age"]
+    gender.current.value = history["records"][0]["Gender"]
+    education.current.value = history["records"][0]["Years_of_Education"]
+    race.current.value = history["records"][0]["Race"]
     adProbability.current.value = (history["records"][0]["ad_probability"] > -1) ? history["records"][0]["ad_probability"] : undefined
     setPatient(patient);
   }
