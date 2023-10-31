@@ -220,28 +220,27 @@ def record(new_record: InputRecord):
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
     return {"message": "Success"}
 
-@app.post("/predict")
-async def predict():
-    return None
-
 # TODO: Delete this when the DB code is running well
 # Testing on GET for now
 @app.get("/predict")
 async def predict(id: str = None):
-    # Pull Record for model
-    record = query_db("SELECT * FROM records WHERE id='{}';".format(id), fetch_all=False)
-    
-    # Error message if patient not found
-    if (record == None):
-        return {"message": f"Patient {id} not found in DB!"}
+    try:
+        # Pull Record for model
+        record = query_db("SELECT * FROM records WHERE id='{}';".format(id), fetch_all=False)
         
-    # Convert JSON string to model input
-    arr = db_tuple_to_numpy(record)
-    
-    # Generate prediction
-    prediction = model.predict(arr)
-    
-    return {"message": f"Prediction: {str(prediction)}"}
+        # Error message if patient not found
+        if (record == None):
+            return HTTPException(status_code=400, detail=f"Patient {id} not found in DB!")
+            
+        # Convert JSON string to model input
+        arr = db_tuple_to_numpy(record)
+        
+        # Generate prediction
+        prediction = model.predict(arr)[0][0]*100
+        
+        return {"ad_probability": prediction}
+    except Exception as e:
+        return HTTPException(status_code=400, detail=f"Error occurred: {str(e)}")
 
 @app.get("/")
 def root():
