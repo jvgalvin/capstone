@@ -5,51 +5,57 @@ import './stylesheets/ImagesInput.css'
 import './stylesheets/SearchBar.css'
 import TextNumberInput from './inputs/TextNumberInput.js';
 import ResultInput from './inputs/ResultInput';
-import ImagesInput from './inputs/ImagesInput';
 import SearchBar from './inputs/SearchBar';
-import { getPatientHistory } from './DatabaseConnection.js';
+import History from './inputs/History';
+import { getPatientHistory, addPatient, getPatientByNameID } from './DatabaseConnection.js';
 
 function App() {
 
   // TextNumberInput value updates to have submit form include all values needed.
   const [inputs, setInputs] = useState({}); //Used for input values
   const adProbability = useRef(); //Used for AD Probability Result
-  const [selectedFiles, setSelectedFiles] = useState([]); //Used for storing file names
-  const selectedFilesRef = useRef();
   const [patient, setPatient] = useState({});
+  const [patientName, setPatientName] = useState("");
   const [history, setHistory] = useState([]);
 
-  const alleles = useRef();
-  const mmse = useRef();
-  const age = useRef();
-  const gender = useRef();
-  const education = useRef();
-  const race = useRef();
+  const APOE4 = useRef();
+  const MMSE = useRef();
+  const Age = useRef();
+  const Gender = useRef();
+  const Years_of_Education = useRef();
+  const Race = useRef();
 
   //Handle finding Patient
-  const handleFoundPatient = async (patient) => {
-    console.log("HERE");
-    console.log(patient);
-    let history = await getPatientHistory(patient["suggestion"]["id"]);
+  const handleFoundPatient = async (patient_suggestion) => {
+    console.log(patient_suggestion);
+    let history = await getPatientHistory(patient_suggestion["suggestion"]["id"]);
     console.log(history)
     setHistory(history["records"]);
     setInputs({
-      "alleles": history["records"][0]["APOE4"],
-      "mmse": history["records"][0]["MMSE"],
-      "age": history["records"][0]["Age"],
-      "gender": history["records"][0]["Gender"],
-      "education": history["records"][0]["Years_of_Education"],
-      "race": history["records"][0]["RAce"],
+      "APOE4": history["records"][0]["APOE4"],
+      "MMSE": history["records"][0]["MMSE"],
+      "Age": history["records"][0]["Age"],
+      "Gender": history["records"][0]["Gender"],
+      "Years_of_Education": history["records"][0]["Years_of_Education"],
+      "Race": history["records"][0]["Race"],
       "ad_probability": history["records"][0]["ad_probability"]
     });
-    alleles.current.value = history["records"][0]["APOE4"]
-    mmse.current.value = history["records"][0]["MMSE"]
-    age.current.value = history["records"][0]["Age"]
-    gender.current.value = history["records"][0]["Gender"]
-    education.current.value = history["records"][0]["Years_of_Education"]
-    race.current.value = history["records"][0]["Race"]
+    APOE4.current.value = history["records"][0]["APOE4"]
+    MMSE.current.value = history["records"][0]["MMSE"]
+    Age.current.value = history["records"][0]["Age"]
+    Gender.current.value = history["records"][0]["Gender"]
+    Years_of_Education.current.value = history["records"][0]["Years_of_Education"]
+    Race.current.value = history["records"][0]["Race"]
     adProbability.current.value = (history["records"][0]["ad_probability"] > -1) ? history["records"][0]["ad_probability"] : undefined
-    setPatient(patient);
+    setPatient(patient_suggestion["suggestion"]);
+    console.log("TEST")
+    console.log(patient)
+  }
+
+  //Handle Patient name entered on search bar
+  const handlePatientNameEntered = (event) => {
+    setPatientName(event.target.value);
+    console.log(patientName);
   }
 
   //Handle input changes
@@ -59,31 +65,28 @@ function App() {
     setInputs(values => ({...values, [name]: value}));
   }
 
-  //Handle Image input changes
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    const fileNames = files.map((file) => file.name);
-    setSelectedFiles(fileNames);
-  };
-
-  //Handle Image removal changes
-  const handleRemoveFiles = () => {
-    setSelectedFiles([]); // Clear the selected files
-    selectedFilesRef.current.value = '';
-  };
-
   // Submit form
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(selectedFiles.length)
     console.log(Object.keys(inputs).length)
-    if(Object.keys(inputs).length < 6 || selectedFiles.length < 1 || selectedFiles.length > 50) {
+    console.log(patientName.length)
+    if(Object.keys(inputs).length < 6) {
       alert("Please enter all fields")
+    } else if(patientName.length < 1) {
+      alert("Please enter Patient name")
     } else {
+      let patient_in_memory = patient
+      if(Object.keys(patient_in_memory).length == 0) {
+        await addPatient(patientName)
+        patient_in_memory = await getPatientByNameID(patientName)
+        console.log(patient_in_memory)
+        setPatient(patient_in_memory)
+      }
+      console.log(patient_in_memory)
       for (const key in inputs) {
         console.log(key + " value: " + inputs[key]);
       }
-      alert(inputs)
+      console.log(inputs)
       adProbability.current.value = 71;
     }
   }
@@ -91,20 +94,18 @@ function App() {
   return (
     <div className="container">
       <div>
-        <h2>Search By Name Or Patient ID</h2>
-        < SearchBar handleFoundPatient={handleFoundPatient}/>
+        <h2>Enter Name / Search By Name Or Patient ID</h2>
+        < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
         <form onSubmit={handleSubmit}>
-          <h2>Upload Images</h2>
-          <ImagesInput handleFileChange={handleFileChange} handleRemoveFiles={handleRemoveFiles} selectedFilesRef={selectedFilesRef} selectedFiles={selectedFiles} />
           <h2>APOE4 Allele Information</h2>
-          <TextNumberInput input_type = 'N' name = 'alleles' input_text = 'How many copies of the 4 allele does this individual have?'handleChange={handleChange} value={alleles} />
+          <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'How many copies of the 4 allele does this individual have?'handleChange={handleChange} value={APOE4} />
           <h2>Clinical Information</h2>
           <div className="form-data">
-            <TextNumberInput input_type = 'N' name = 'mmse' input_text = 'MMSE Score:' handleChange={handleChange} value={mmse} />
-            <TextNumberInput input_type = 'N' name = 'age'input_text = 'Age:' handleChange={handleChange} value={age} />
-            <TextNumberInput input_type = 'T' name = 'gender' input_text = 'Gender:' handleChange={handleChange} value={gender} />
-            <TextNumberInput input_type = 'N' name = 'education' input_text = 'Education:' handleChange={handleChange} value={education} />
-            <TextNumberInput input_type = 'T' name = 'race' input_text = 'Race:' handleChange={handleChange} value={race} />
+            <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'MMSE Score:' handleChange={handleChange} value={MMSE} />
+            <TextNumberInput input_type = 'N' name = 'Age'input_text = 'Age:' handleChange={handleChange} value={Age} />
+            <TextNumberInput input_type = 'T' name = 'Gender' input_text = 'Gender:' handleChange={handleChange} value={Gender} />
+            <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Education:' handleChange={handleChange} value={Years_of_Education} />
+            <TextNumberInput input_type = 'T' name = 'Race' input_text = 'Race:' handleChange={handleChange} value={Race} />
           </div>
           <div className="submit-container">
             <input type="submit" />
@@ -113,13 +114,7 @@ function App() {
       </div>
       <div>
         <h2>Patient History</h2>
-        <div>
-        {history.map((item) => (
-                <p>
-                    alleles: {item["alleles"]}, mmse: {item["alleles"]}, age: {item["age"]}, gender: {item["gender"]}, education: {item["education"]}, race: {item["race"]}, ad_probability: {item["ad_probability"]}
-                </p>
-            ))}
-        </div>
+        <History history={history}/>
         <ResultInput resultValue={adProbability} />
       </div>
     </div>

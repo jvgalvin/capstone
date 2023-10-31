@@ -5,3 +5,4 @@
 # Ignore unnecessary checkpoints
 /data/Data*
 *.DS_Store
+/src/__pycache__*

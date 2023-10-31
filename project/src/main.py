@@ -198,15 +198,15 @@ def record(new_record: InputRecord):
     insert_query = insert_query[:len(insert_query)-1]
     insert_query = insert_query + ") VALUES("
     insert_query = insert_query + str(new_record.patient_id) + ","
+    insert_query = insert_query + str(new_record.ad_probability) + ","
     insert_query = insert_query + "'" + str(new_record.Diagnosis_at_Baseline) + "',"
-    insert_query = insert_query + str(new_record.APOE4) + ","
-    insert_query = insert_query + str(new_record.MMSE) + ","
     insert_query = insert_query + str(new_record.Age) + ","
     insert_query = insert_query + "'" + str(new_record.Gender) + "',"
     insert_query = insert_query + str(new_record.Years_of_Education) + ","
     insert_query = insert_query +  "'" + str(new_record.Ethnicity) + "',"
     insert_query = insert_query +  "'" + str(new_record.Race) + "',"
-    insert_query = insert_query + str(new_record.ad_probability) + ","
+    insert_query = insert_query + str(new_record.APOE4) + ","
+    insert_query = insert_query + str(new_record.MMSE) + ","
     for value in range(11, len(original_record[0]) - 2):
         insert_query = insert_query + str(original_record[0][value]) + ","
     insert_query = insert_query[:len(insert_query)-1]

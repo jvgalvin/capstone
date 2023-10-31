@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { getPatientByNameID } from '../DatabaseConnection.js';
 
-function SearchBar({handleFoundPatient}) {
+function SearchBar({handleFoundPatient, handlePatientNameEntered}) {
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
 
     const fetchData = async (value) => {
-        console.log(value.length)
         if (value.length >= 2) {
             try {
                 let patient = await getPatientByNameID(value);
@@ -24,9 +23,10 @@ function SearchBar({handleFoundPatient}) {
             <input
                 className="searchbar-input"
                 type="text"
-                placeholder="Search by Name or Patient ID"
+                placeholder="Enter Name / Search by Name or Patient ID"
                 value={value}
                 onChange={(e) => {
+                    handlePatientNameEntered(e);
                     setValue(e.target.value);
                     fetchData(e.target.value);
                 }}

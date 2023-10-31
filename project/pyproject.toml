@@ -6,7 +6,7 @@ authors = ["Jack <jgalvin@berkeley.edu>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.7,<3.9"
+python = ">=3.11,<3.12"
 pydicom = "^2.4.3"
 scikit-learn = "^1.3.1"
 fastapi = "^0.95.2"
