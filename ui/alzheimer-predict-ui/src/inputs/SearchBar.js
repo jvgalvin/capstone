@@ -6,7 +6,8 @@ function SearchBar({handleFoundPatient, handlePatientNameEntered}) {
     const [suggestions, setSuggestions] = useState([]);
 
     const fetchData = async (value) => {
-        if (value.length >= 2) {
+        console.log(value)
+        if (value.length > 2) {
             try {
                 let patient = await getPatientByNameID(value);
                 setSuggestions([patient])
@@ -37,7 +38,7 @@ function SearchBar({handleFoundPatient, handlePatientNameEntered}) {
                         setSuggestions([])
                     }
                 }>
-                    {suggestion["patient_name"]}
+                    {suggestion["patient_id"]}
                 </div>
             ))}
         </div>

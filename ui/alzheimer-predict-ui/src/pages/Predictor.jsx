@@ -27,7 +27,7 @@ function Predictor() {
   //Handle finding Patient
   const handleFoundPatient = async (patient_suggestion) => {
     console.log(patient_suggestion);
-    let history = await getPatientHistory(patient_suggestion["suggestion"]["id"]);
+    let history = await getPatientHistory(patient_suggestion["suggestion"]["patient_id"]);
     console.log(history)
     setHistory(history["records"]);
     setInputs({

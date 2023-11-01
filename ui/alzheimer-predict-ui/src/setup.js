@@ -2,7 +2,7 @@ const { Client } = require('pg');
 
 const patient_data = [
     {
-        "patient_name": "Patient_One",
+        "patient_id": "ABC",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 2,
         "MMSE": 24,
@@ -14,7 +14,7 @@ const patient_data = [
         "ad_probability": -1
     },
     {
-        "patient_name": "Patient_Two",
+        "patient_id": "CDB",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 1,
         "MMSE": 15,
@@ -26,7 +26,7 @@ const patient_data = [
         "ad_probability": 71
     },
     {
-        "patient_name": "Patient_Three",
+        "patient_id": "FJK",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 2,
         "MMSE": 20,
@@ -38,7 +38,7 @@ const patient_data = [
         "ad_probability": 80
     },
     {
-        "patient_name": "Patient_Four",
+        "patient_id": "XYZ",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 1,
         "MMSE": 24,
@@ -50,7 +50,7 @@ const patient_data = [
         "ad_probability": -1
     },
     {
-        "patient_name": "Patient_Five",
+        "patient_id": "PWK",
         "Diagnosis_at_Baseline": "LMCI",
         "APOE4": 3,
         "MMSE": 30,
@@ -98,7 +98,7 @@ function isInt(inputString) {
     let createTableQuery = `
         CREATE TABLE IF NOT EXISTS patients(
         id INT GENERATED ALWAYS AS IDENTITY,
-        patient_name VARCHAR NOT NULL,
+        patient_id VARCHAR NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
         );
     `;
@@ -107,16 +107,16 @@ function isInt(inputString) {
 
     for (const patient of patient_data) {
         console.log(patient)
-        console.log(`adding: ${patient["patient_name"]}`)
-        let insertRow = await client.query('INSERT INTO patients(patient_name) VALUES($1);',
-                                           [`${patient["patient_name"]}`]);
+        console.log(`adding: ${patient["patient_id"]}`)
+        let insertRow = await client.query('INSERT INTO patients(patient_id) VALUES($1);',
+                                           [`${patient["patient_id"]}`]);
         console.log(`Inserted ${insertRow.rowCount} row`);
     }
 
     let createRecordTableQuery = `
         CREATE TABLE IF NOT EXISTS records(
         id INT GENERATED ALWAYS AS IDENTITY,
-        patient_id INT,
+        patient_id VARCHAR,
     `;
 
     for (const d of Object.keys(data)) {
@@ -162,9 +162,7 @@ function isInt(inputString) {
 
     for (const patient of patient_data) {
         console.log(patient)
-        console.log(`adding data for : ${patient["patient_name"]}`)
-        let patient_id = await client.query(`SELECT id FROM patients WHERE patient_name='${patient["patient_name"]}'`)
-        console.log(patient_id.rows[0]["id"]);
+        console.log(`adding data for : ${patient["patient_id"]}`)
         let variables = "INSERT INTO records(patient_id, "
         for (const d of Object.keys(data)) {
             variables = variables + `${d.replaceAll(".", "")},`
@@ -191,7 +189,7 @@ function isInt(inputString) {
         }
         variables = variables.substring(0, variables.length - 2) + ");"
         console.log(variables)
-        values = [`${patient_id.rows[0]["id"]}`,`${patient["ad_probability"]}`, "LMCI",`${patient["Age"]}`,`${patient["Gender"]}`,
+        values = [`${patient["patient_id"]}`,`${patient["ad_probability"]}`, "LMCI",`${patient["Age"]}`,`${patient["Gender"]}`,
                   `${patient["Years_of_Education"]}`, `${patient["Ethnicity"]}`, `${patient["Race"]}`, `${patient["APOE4"]}`,`${patient["MMSE"]}`]
         columns_to_not_use = ["patient_id", "Diagnosis_at_Baseline", "APOE4", "MMSE", "Age", "Gender", "Years_of_Education", "Ethnicity", "Race", "ad_probability"]
         for (const d of Object.keys(data)) {

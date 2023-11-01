@@ -1,7 +1,7 @@
 const host = "http://127.0.0.1:8000/"
 
 export function getPatientByNameID(value) {
-    return fetch(`${host}patient?name=${value}`)
+    return fetch(`${host}patient?id=${value}`)
         .then((response) => response.json())
         .then((patient) => {
             return patient

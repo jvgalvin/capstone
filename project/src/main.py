@@ -33,21 +33,21 @@ app.add_middleware(
 connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_predict_user", password="12345678", host="localhost", port=5432)
 
 # Import Model-related objects
-model = joblib.load(OBJECT_PATH + "model.pkl")
-scaler = joblib.load(OBJECT_PATH + "scaler.gz")
-encoder_dx = joblib.load(OBJECT_PATH + "encoder_dx.gz")
-encoder_eth = joblib.load(OBJECT_PATH + "encoder_eth.gz")
-encoder_gender = joblib.load(OBJECT_PATH + "encoder_gender.gz")
-encoder_race = joblib.load(OBJECT_PATH + "encoder_race.gz")
+# model = joblib.load(OBJECT_PATH + "model.pkl")
+# scaler = joblib.load(OBJECT_PATH + "scaler.gz")
+# encoder_dx = joblib.load(OBJECT_PATH + "encoder_dx.gz")
+# encoder_eth = joblib.load(OBJECT_PATH + "encoder_eth.gz")
+# encoder_gender = joblib.load(OBJECT_PATH + "encoder_gender.gz")
+# encoder_race = joblib.load(OBJECT_PATH + "encoder_race.gz")
 
 class Patient(BaseModel):
     id: int
-    patient_name: Optional[str] = None
+    patient_id: Optional[str] = None
     created_at: str
 
 class Record(BaseModel):
     id: int
-    patient_id: int
+    patient_id: str
     Diagnosis_at_Baseline: str
     APOE4: int
     MMSE: int
@@ -64,7 +64,7 @@ class Records(BaseModel):
     records = [Record]
 
 class InputRecord(BaseModel):
-    patient_id: int
+    patient_id: str
     Diagnosis_at_Baseline: str
     APOE4: int
     MMSE: int
@@ -131,26 +131,26 @@ def db_tuple_to_numpy(input_tuple):
 # API Methods
 
 @app.get("/patient", response_model=Patient)
-def patient(name: str = None):
-    if name == None or name.strip() == "":
+def patient(id: str = None):
+    if id == None or id.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
     
-    record = query_db("SELECT * FROM patients WHERE patient_name='{}';".format(name), fetch_all=False)
+    record = query_db("SELECT * FROM patients WHERE patient_id='{}';".format(id), fetch_all=False)
     if (record == None):
         raise HTTPException(status_code=404, detail="Patient Not Found")
-    patient_record = Patient(id=record[0], patient_name=record[1], created_at=record[2].isoformat())
+    patient_record = Patient(id=record[0], patient_id=record[1], created_at=record[2].isoformat())
     return patient_record
 
 @app.post("/patient", status_code=201)
 def patient(patient: str = None):
     if patient == None or patient.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
-    record = query_db("SELECT * FROM patients WHERE patient_name='{}';".format(patient), fetch_all=False)
+    record = query_db("SELECT * FROM patients WHERE patient_id='{}';".format(patient), fetch_all=False)
     if (record is not None):
         raise HTTPException(status_code=400, detail="Patient already exists.")
     try:
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO patients(patient_name) VALUES('{}');".format(patient))
+        cursor.execute("INSERT INTO patients(patient_id) VALUES('{}');".format(patient))
         connection.commit()
     except:
         connection.rollback()
@@ -158,7 +158,7 @@ def patient(patient: str = None):
     return {"message": "Success"}
 
 @app.get("/patient/record", response_model=Records)
-def record(patient_id: int):
+def record(patient_id: str):
     records = query_db("SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability, created_at, updated_at FROM records WHERE patient_id='{}' ORDER BY updated_at DESC;".format(patient_id), fetch_all=True)
     if (records == []):
         raise HTTPException(status_code=404, detail="Patient History Not Found")
