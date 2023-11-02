@@ -230,7 +230,6 @@ async def predict(id: str = None):
         if (record == None):
             return HTTPException(status_code=400, detail=f"Patient {id} not found in DB!")
         
-        
         # Convert JSON string to model input
         arr = db_tuple_to_numpy(record)
         
