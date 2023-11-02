@@ -33,12 +33,12 @@ app.add_middleware(
 connection = psycopg2.connect(database="alzheimer_predict", user="alzheimer_predict_user", password="12345678", host="localhost", port=5432)
 
 # Import Model-related objects
-# model = joblib.load(OBJECT_PATH + "model.pkl")
-# scaler = joblib.load(OBJECT_PATH + "scaler.gz")
-# encoder_dx = joblib.load(OBJECT_PATH + "encoder_dx.gz")
-# encoder_eth = joblib.load(OBJECT_PATH + "encoder_eth.gz")
-# encoder_gender = joblib.load(OBJECT_PATH + "encoder_gender.gz")
-# encoder_race = joblib.load(OBJECT_PATH + "encoder_race.gz")
+model = joblib.load(OBJECT_PATH + "model.pkl")
+scaler = joblib.load(OBJECT_PATH + "scaler.gz")
+encoder_dx = joblib.load(OBJECT_PATH + "encoder_dx.gz")
+encoder_eth = joblib.load(OBJECT_PATH + "encoder_eth.gz")
+encoder_gender = joblib.load(OBJECT_PATH + "encoder_gender.gz")
+encoder_race = joblib.load(OBJECT_PATH + "encoder_race.gz")
 
 class Patient(BaseModel):
     id: int
@@ -220,8 +220,6 @@ def record(new_record: InputRecord):
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
     return {"message": "Success"}
 
-# TODO: Delete this when the DB code is running well
-# Testing on GET for now
 @app.get("/predict")
 async def predict(id: str = None):
     try:
@@ -231,7 +229,8 @@ async def predict(id: str = None):
         # Error message if patient not found
         if (record == None):
             return HTTPException(status_code=400, detail=f"Patient {id} not found in DB!")
-            
+        
+        
         # Convert JSON string to model input
         arr = db_tuple_to_numpy(record)
         
