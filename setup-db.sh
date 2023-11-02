@@ -10,4 +10,4 @@ docker run --name $ALZHEIMER_PREDICT_DB -e POSTGRES_PASSWORD=12345678 -e POSTGRE
 
 sleep 20
 
-node ./ui/alzheimer-predict-ui/src/setup.js
+node ./ui/alzheimer-predict-ui/src/setup-db.js
