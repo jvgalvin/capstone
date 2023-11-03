@@ -1,11 +1,9 @@
 const { Client } = require('pg');
 var fs = require('fs');
 var arrayPath = "./ui/alzheimer-predict-ui/src/db_data_converted.json"
-//var arrayPath = './db_data_converted.json';
 
 function fsReadFileSynchToArray (filePath) {
     var data = JSON.parse(fs.readFileSync(filePath));
-    //console.log(data);
     return data;
 }
 
