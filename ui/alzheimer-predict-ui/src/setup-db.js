@@ -89,7 +89,6 @@ function isInt(inputString) {
 }
 
 (async () => {
-    console.log("[OZIL] Start")
 
     const data = db_data[0][0]
     const data_part_two = db_data[0][1]
@@ -106,6 +105,10 @@ function isInt(inputString) {
     let res = await client.query('SELECT $1::text as connected', ['Connection to postgres successful!']);
     console.log(res.rows[0].connected);
 
+    /*
+        CREATE PATIENTS TABLE
+    */
+
     let createTableQuery = `
         CREATE TABLE IF NOT EXISTS patients(
         id INT GENERATED ALWAYS AS IDENTITY,
@@ -116,15 +119,9 @@ function isInt(inputString) {
     res = await client.query(createTableQuery);
     console.log(`Created table. ${res}`);
 
-    for (const patient of patient_data) {
-        console.log(patient)
-        console.log(`adding: ${patient["patient_id"]}`)
-        let insertRow = await client.query('INSERT INTO patients(patient_id) VALUES($1);',
-                                           [`${patient["patient_id"]}`]);
-        console.log(`Inserted ${insertRow.rowCount} row`);
-    }
-
-    console.log("[OZIL] Create Record table")
+    /*
+        CREATE RECORDS TABLE
+    */
 
     let createRecordTableQuery = `
         CREATE TABLE IF NOT EXISTS records(
@@ -173,16 +170,27 @@ function isInt(inputString) {
     console.log(`Created table. ${res}`);
 
     /*
-    POPULATE TABLE
+        POPULATE TABLES FROM DATA
     */
-
-    console.log("[OZIL] Populate Record table")
 
     for (const row of db_data) {
         const data_1 = row[0]
         const data_2 = row[1]
         const data_3 = row[2]
         
+        /*
+            POPULATE PATIENTS TABLE
+        */
+
+        console.log(`adding: ${data_1["patient_id"]}`)
+        let insertPatientRow = await client.query('INSERT INTO patients(patient_id) VALUES($1);',
+                                               [`${data_1["patient_id"]}`]);
+        console.log(`Inserted ${insertPatientRow.rowCount} row`);
+
+        /*
+            POPULATE RECORDS TABLE
+        */
+
         console.log(`adding data for : ${data_1["patient_id"]}`)
         let variables = "INSERT INTO records("
         for (const d of Object.keys(data_1)) {
