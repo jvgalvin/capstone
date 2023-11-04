@@ -1,7 +1,8 @@
 ARG APP_DIR=/capstone/project
 
 # Build  image
-FROM python:3.11-slim AS build
+# FROM python:3.11-slim AS build
+FROM tensorflow/tensorflow:2.11.1-gpu AS build
 ARG APP_DIR
 
 RUN apt-get update \
@@ -21,22 +22,7 @@ COPY ./ ./
 
 RUN python -m venv --copies ${APP_DIR}/venv
 RUN . ${APP_DIR}/venv/bin/activate
-RUN poetry install
-
-# Install node JS in container
-ENV NODE_VERSION=16.13.0
-RUN apt install -y curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-ENV NVM_DIR=/root/.nvm
-RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
-ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-RUN node --version
-RUN npm --version
-
-# Install PG for node JS
-# RUN npm install pg
+# RUN poetry install
 
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip
@@ -45,4 +31,8 @@ RUN python3 -m pip install --upgrade pip
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt
 
-CMD ["poetry", "run", "uvicorn", "src.main:app"]
+EXPOSE 5000
+EXPOSE 8000
+
+# Run uvicorn on 127.0.1.1:5000
+CMD ["uvicorn", "src.main:app", "--host", "127.0.1.1", "--port", "5000"]
