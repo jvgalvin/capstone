@@ -48,6 +48,9 @@ RUN pip install -r requirements.txt
 COPY ./setup-db.sh ./
 COPY ./ui/alzheimer-predict-ui/src/setup.js ./ui/alzheimer-predict-ui/src/
 
+EXPOSE 3000
+EXPOSE 8000
+
 CMD ["bash", "setup-db.sh"]
 
 # CMD ["poetry", "run", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]

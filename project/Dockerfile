@@ -31,8 +31,8 @@ RUN python3 -m pip install --upgrade pip
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
+EXPOSE 3000
 EXPOSE 8000
 
-# Run uvicorn on 127.0.1.1:5000
-CMD ["uvicorn", "src.main:app", "--host", "127.0.1.1", "--port", "5000"]
+# Run uvicorn on 127.0.0.1:3000
+CMD ["uvicorn", "src.main:app", "--port", "3000"]
