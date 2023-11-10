@@ -1,4 +1,14 @@
 import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Stack from 'react-bootstrap/Stack';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import '../stylesheets/App.css';
 import '../stylesheets/TextNumberInput.css'
 import '../stylesheets/SearchBar.css'
@@ -91,10 +101,15 @@ function Predictor() {
   }
 
   return (
-    <div className="container">
-      <div>
+    <Container>
+      <Row>
+      <Col sm={8}>
+        <Stack gap={3}>
+        <div className="p-2">
         <h2>Enter Name / Search By Name Or Patient ID</h2>
         < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
+        </div>
+        <div className="p-2">
         <form onSubmit={handleSubmit}>
           <h2>APOE4 Allele Information</h2>
           <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'How many copies of the 4 allele does this individual have?'handleChange={handleChange} value={APOE4} />
@@ -110,13 +125,33 @@ function Predictor() {
             <input type="submit" />
           </div>
         </form>
-      </div>
-      <div>
+        </div>
+        </Stack>
+      </Col>
+      <Col sm={4}>
+      <Stack gap={4}>
+      <div className="p-2">
         <h2>Patient History</h2>
         <History history={history}/>
         <ResultInput resultValue={adProbability} />
       </div>
+      <div className="p-2">
+      <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Typography variant="body2">
+        Our machine learning model has predicted the probability that you may develop Alzheimer’s Disease within the next 5 years. 
+        </Typography>
+        <br></br>
+      </CardContent>
+      <CardActions>
+        <Button size="small" as={Link} to="/resources">Now What?</Button>
+      </CardActions>
+    </Card>
     </div>
+    </Stack>
+      </Col>
+    </Row>
+  </Container>
   );
 }
 
