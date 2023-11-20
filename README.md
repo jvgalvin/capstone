@@ -1,12 +1,12 @@
 # Capstone
 Application for the detection of dementia in Alzheimer's patients
 
-# How to build API and DB locally without containers:
-
-## Prerequisites:
+# Prerequisites:
 - Make sure that the dependencies in [requirements.txt](./requirements.txt) are installed
 - Make sure that minikube is installed
 - Make sure that your minikube is started (by running `minikube start`)
+
+# How to build API and DB locally without containers:
 
 ## Steps
 1. Navigate the the root folder `/capstone`
