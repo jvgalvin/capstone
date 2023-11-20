@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: <dockerhub_username>/<image_name>:<tag>
+        image: landmund/fastapi:20231120
         ports:
         - containerPort: 80

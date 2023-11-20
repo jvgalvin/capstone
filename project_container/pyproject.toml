@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+description = ""
+authors = ["Jack <jgalvin@berkeley.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+pydicom = "^2.4.3"
+scikit-learn = "^1.3.1"
+fastapi = "^0.95.2"
+uvicorn = "^0.22.0"
+scipy = "^1.10"
+pydantic = "^1.10.8"
+joblib = "^1.2.0"
+psycopg2-binary = "^2.9.9"
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+notebook = "^7.0.3"
+pandas = "^2.1.0"
+pandas-plink = "^2.2.9"
+matplotlib = "^3.7.2"
+numpy = "^1.24.3"
+jupyternotify = "^0.1.15"
+pytest = "^7.3"
+httpx = "^0.24.1"
+isort = "^5.12.0"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

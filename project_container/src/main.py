@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 import psycopg2
 
-OBJECT_PATH = "/workspaces/capstone/project/src/"
-# OBJECT_PATH = "./src/"
+# OBJECT_PATH = "/workspaces/capstone/project/src/"
+OBJECT_PATH = "./src/"
 
 # Indices for the encoded parameters
 POS_DIAGNOSIS = 0
