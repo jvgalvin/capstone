@@ -36,5 +36,5 @@ EXPOSE 3000
 EXPOSE 8000
 EXPOSE 5432
 
-# Run uvicorn on 127.0.0.1:3000
-CMD ["uvicorn", "src.main:app", "--port", "3000"]
+# Run uvicorn on 127.0.0.1:8000
+CMD ["uvicorn", "src.main:app", "--port", "8000"]
