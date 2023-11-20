@@ -251,6 +251,17 @@ async def predict(id: str = None):
     except Exception as e:
         return HTTPException(status_code=400, detail=f"Error occurred: {str(e)}")
 
+@app.get("/reset")
+def reset():
+    try:
+        connection = get_sql_connection()
+        
+        connection.rollback()
+        
+        return {"message": "connection rollback successful"}
+    except Exception as e:
+        return HTTPException(status_code=400, detail=f"Error occurred: {str(e)}")
+
 @app.get("/")
 def root():
     # We are using the 404 Not Found error since this page is not implemented
