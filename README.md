@@ -17,7 +17,7 @@ Application for the detection of dementia in Alzheimer's patients
 # How to build containers and Kubernetes deployment
 
 ## 1. Build API Container:
-1. Navigate to the `/capstone/project_container` folder
+1. Navigate to the `/capstone/project` folder
 2. Run the following command: `docker build -t <dockerhub_username>/<image_name>:<tag> .` (this will help label the image)
 3. Push image to registry using the following command: `minikube image load <dockerhub_username>/<image_name>:<tag> .`
 

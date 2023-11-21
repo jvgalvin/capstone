@@ -6,11 +6,16 @@ from typing import Optional
 import json
 import joblib
 import numpy as np
+import os
 import pandas as pd
 import psycopg2
 
-OBJECT_PATH = "/workspaces/capstone/project/src/"
-# OBJECT_PATH = "./src/"
+
+if os.environ.get('MODEL_OBJECT_PATH') is None:
+    OBJECT_PATH = "/workspaces/capstone/project/src/"
+    #OBJECT_PATH = "./src/"
+else:
+    OBJECT_PATH = str(os.environ.get('MODEL_OBJECT_PATH'))
 
 # Indices for the encoded parameters
 POS_DIAGNOSIS = 0

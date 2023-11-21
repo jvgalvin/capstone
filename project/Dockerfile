@@ -1,4 +1,4 @@
-ARG APP_DIR=/capstone/project_container
+ARG APP_DIR=/capstone/project
 
 # Build  image
 # FROM python:3.11-slim AS build
@@ -35,6 +35,8 @@ EXPOSE 80
 EXPOSE 3000
 EXPOSE 8000
 EXPOSE 5432
+
+ENV MODEL_OBJECT_PATH "./src/"
 
 # Run uvicorn on 0.0.0.0:80
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
