@@ -2,7 +2,7 @@
 Application for the detection of dementia in Alzheimer's patients
 
 # Prerequisites:
-- Make sure that the dependencies in [requirements.txt](./requirements.txt) are installed
+- Make sure that the dependencies in [requirements.txt](./requirements.txt) are installed (a VS Code Devcontainer is recommended)
 - Make sure that minikube is installed
 - Make sure that your minikube is started (by running `minikube start`)
 - Make sure that 'node' and its module 'pg' are installed
