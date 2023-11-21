@@ -36,7 +36,7 @@ RUN node --version
 RUN npm --version
 
 # Install PG for node JS
-# RUN npm install pg
+RUN npm install
 
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip
