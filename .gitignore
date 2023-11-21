@@ -1,4 +1,4 @@
-# Ingore Martin's personal virtual environment for VS Code
+# Ignore Martin's personal virtual environment for VS Code
 /.venv
 /notebooks/data
 
