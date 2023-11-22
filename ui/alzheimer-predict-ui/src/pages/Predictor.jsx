@@ -16,7 +16,7 @@ import TextNumberInput from '../inputs/TextNumberInput.js';
 import ResultInput from '../inputs/ResultInput';
 import SearchBar from '../inputs/SearchBar';
 import History from '../inputs/History';
-import { getPatientHistory, addPatient, getPatientByNameID } from '../DatabaseConnection.js';
+import { getPatientHistory, addPatient, getPatientByNameID, addHistoryForPatient } from '../DatabaseConnection.js';
 
 function Predictor() {
 
@@ -33,32 +33,53 @@ function Predictor() {
   const Gender = useRef();
   const Years_of_Education = useRef();
   const Race = useRef();
+  const Diagnosis_at_Baseline = useRef();
+  const Ethnicity = useRef();
 
   //Handle finding Patient
   const handleFoundPatient = async (patient_suggestion) => {
     console.log(patient_suggestion);
-    let history = await getPatientHistory(patient_suggestion["suggestion"]["patient_id"]);
-    console.log(history)
-    setHistory(history["records"]);
-    setInputs({
-      "APOE4": history["records"][0]["APOE4"],
-      "MMSE": history["records"][0]["MMSE"],
-      "Age": history["records"][0]["Age"],
-      "Gender": history["records"][0]["Gender"],
-      "Years_of_Education": history["records"][0]["Years_of_Education"],
-      "Race": history["records"][0]["Race"],
-      "ad_probability": history["records"][0]["ad_probability"]
-    });
-    APOE4.current.value = history["records"][0]["APOE4"]
-    MMSE.current.value = history["records"][0]["MMSE"]
-    Age.current.value = history["records"][0]["Age"]
-    Gender.current.value = history["records"][0]["Gender"]
-    Years_of_Education.current.value = history["records"][0]["Years_of_Education"]
-    Race.current.value = history["records"][0]["Race"]
-    adProbability.current.value = (history["records"][0]["ad_probability"] > -1) ? history["records"][0]["ad_probability"] : undefined
-    setPatient(patient_suggestion["suggestion"]);
-    console.log("TEST")
-    console.log(patient)
+    if(patient_suggestion !== null) {
+      let history = await getPatientHistory(patient_suggestion["suggestion"]["patient_id"]);
+      console.log(history)
+      setHistory(history["records"]);
+      setInputs({
+        "APOE4": history["records"][0]["APOE4"],
+        "MMSE": history["records"][0]["MMSE"],
+        "Age": history["records"][0]["Age"],
+        "Gender": history["records"][0]["Gender"],
+        "Years_of_Education": history["records"][0]["Years_of_Education"],
+        "Race": history["records"][0]["Race"],
+        "Diagnosis_at_Baseline": history["records"][0]["Diagnosis_at_Baseline"],
+        "Ethnicity": history["records"][0]["Ethnicity"],
+        "ad_probability": history["records"][0]["ad_probability"]
+      });
+      APOE4.current.value = history["records"][0]["APOE4"]
+      MMSE.current.value = history["records"][0]["MMSE"]
+      Age.current.value = history["records"][0]["Age"]
+      Gender.current.value = history["records"][0]["Gender"]
+      Years_of_Education.current.value = history["records"][0]["Years_of_Education"]
+      Race.current.value = history["records"][0]["Race"]
+      Diagnosis_at_Baseline.current.value = history["records"][0]["Diagnosis_at_Baseline"]
+      Ethnicity.current.value = history["records"][0]["Ethnicity"]
+      adProbability.current.value = (history["records"][0]["ad_probability"] > -1) ? history["records"][0]["ad_probability"] : null
+      setPatient(patient_suggestion["suggestion"]);
+      console.log("TEST")
+      console.log(patient)
+    } else {
+      setHistory([])
+      setInputs({})
+      setPatient({})
+      APOE4.current.value = null
+      MMSE.current.value = null
+      Age.current.value = null
+      Gender.current.value = null
+      Years_of_Education.current.value = null
+      Race.current.value = null
+      Diagnosis_at_Baseline.current.value = null
+      Ethnicity.current.value = null
+      adProbability.current.value = null
+    }
   }
 
   //Handle Patient name entered on search bar
@@ -92,11 +113,21 @@ function Predictor() {
         setPatient(patient_in_memory)
       }
       console.log(patient_in_memory)
-      for (const key in inputs) {
-        console.log(key + " value: " + inputs[key]);
+      let final_inputs = inputs
+      final_inputs["patient_id"] = patient_in_memory.patient_id
+      final_inputs["ad_probability"] = final_inputs["ad_probability"] != null ? final_inputs["ad_probability"] : -1
+      for (const key in final_inputs) {
+        console.log(key + " value: " + final_inputs[key]);
       }
-      console.log(inputs)
-      adProbability.current.value = 71;
+      console.log(final_inputs)
+      //adProbability.current.value = 71;
+      let result = await addHistoryForPatient(final_inputs)
+      console.log(result)
+      if(result !== undefined) {
+        alert("Success Saving Patient " + patient_in_memory.patient_id)
+      } else {
+        alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+      }
     }
   }
 
@@ -116,10 +147,12 @@ function Predictor() {
           <h2>Clinical Information</h2>
           <div className="form-data">
             <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'MMSE Score:' handleChange={handleChange} value={MMSE} />
+            <TextNumberInput input_type = 'T' name = 'Diagnosis_at_Baseline' input_text = 'Diagnosis_at_Baseline:' handleChange={handleChange} value={Diagnosis_at_Baseline} />
             <TextNumberInput input_type = 'N' name = 'Age'input_text = 'Age:' handleChange={handleChange} value={Age} />
             <TextNumberInput input_type = 'T' name = 'Gender' input_text = 'Gender:' handleChange={handleChange} value={Gender} />
             <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Education:' handleChange={handleChange} value={Years_of_Education} />
             <TextNumberInput input_type = 'T' name = 'Race' input_text = 'Race:' handleChange={handleChange} value={Race} />
+            <TextNumberInput input_type = 'T' name = 'Ethnicity' input_text = 'Ethnicity:' handleChange={handleChange} value={Ethnicity} />
           </div>
           <div className="submit-container">
             <input type="submit" />

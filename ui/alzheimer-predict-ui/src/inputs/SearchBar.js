@@ -10,9 +10,15 @@ function SearchBar({handleFoundPatient, handlePatientNameEntered}) {
         if (value.length > 2) {
             try {
                 let patient = await getPatientByNameID(value);
-                setSuggestions([patient])
+                if(patient !== null) {
+                    setSuggestions([patient])
+                } else {
+                    throw new Error("Unable to retrieve patient data.")
+                }
             } catch (error) {
-            console.log(error);
+                console.log(error);
+                setSuggestions([]);
+                handleFoundPatient(null);
             }
         } else {
             setSuggestions([]);

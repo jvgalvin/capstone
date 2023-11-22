@@ -187,7 +187,7 @@ def record(new_record: InputRecord):
         raise HTTPException(status_code=400, detail="Record already exists")
     
     ## Get Patient to get Image Array from
-    original_record = query_db("SELECT * FROM records WHERE patient_id='1' ORDER BY created_at ASC LIMIT 1;", fetch_all=True)
+    original_record = query_db("SELECT * FROM records WHERE patient_id='ABC' ORDER BY created_at ASC LIMIT 1;", fetch_all=True)
     ## Get Columns to create insert query
     columns = query_db("SELECT column_name FROM information_schema.columns WHERE table_name = 'records' order by ordinal_position ASC;", fetch_all=True)
     
@@ -196,8 +196,8 @@ def record(new_record: InputRecord):
         if column[0] != "id" and column[0] != "created_at" and column[0] != "updated_at":
             insert_query = insert_query + column[0] + ","
     insert_query = insert_query[:len(insert_query)-1]
-    insert_query = insert_query + ") VALUES("
-    insert_query = insert_query + str(new_record.patient_id) + ","
+    insert_query = insert_query + ") VALUES('"
+    insert_query = insert_query + str(new_record.patient_id) + "',"
     insert_query = insert_query + str(new_record.ad_probability) + ","
     insert_query = insert_query + "'" + str(new_record.Diagnosis_at_Baseline) + "',"
     insert_query = insert_query + str(new_record.Age) + ","
