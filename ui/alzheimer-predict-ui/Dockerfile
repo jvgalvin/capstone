@@ -24,6 +24,9 @@ RUN npm --version
 
 COPY package.json /app
 
+# Upgrade NPM
+RUN npm update -g npm
+
 # Run NPM Install
 RUN npm install
 
