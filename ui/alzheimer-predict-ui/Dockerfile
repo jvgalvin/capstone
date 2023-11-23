@@ -2,7 +2,9 @@ ARG APP_DIR=/capstone/ui/alzheimer-predict-ui
 
 # Build image
 FROM node AS build
-ARG APP_DIR
+
+RUN mkdir /app
+WORKDIR /app
 
 RUN apt-get update \
     && apt-get install -y \
@@ -11,20 +13,22 @@ RUN apt-get update \
         libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy all files
-WORKDIR ${APP_DIR}
-COPY ./ ./
-
 EXPOSE 80
 EXPOSE 3000
-EXPOSE 8000
 EXPOSE 5432
+EXPOSE 8000
+EXPOSE 8080
 
 RUN node --version
 RUN npm --version
 
+COPY package.json /app
+
 # Run NPM Install
 RUN npm install
+
+# Copy all files
+COPY . ./
 
 # Run NPM Start
 CMD ["npm", "start"]
