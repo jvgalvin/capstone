@@ -2,8 +2,18 @@ export default function Resources() {
   return (
     <div className="container">
       <div>
-      <h2>Additional Information</h2>
-        <p>Out of an abundance of caution, you should consult with your physician about screening for the diseases below, which commonly occur alongside Alzheimer’s:</p>
+      <h2>Alzheimer's Disease Resources</h2>
+        <a href="https://www.alz.org/" target="_blank" > Alzheimer's Association</a> - The Alzheimer's Association has 
+        curated loads of resources, which are available <a href="https://www.alz.org/help-support/resources" target="_blank"> here</a>. These resources include access to virtual events, 
+        assistance with building an action plan, access to expert advice for caregivers, a 24/7 helpline, 
+        strategies for coping with emotions associated with caring for someone with the disease, 
+        and several race- and ethnicity-specific resources.
+        <br></br>
+        <a href="https://www.alzheimers.gov/life-with-dementia/resources-caregivers" target="_blank" > Alzheimers.gov</a> - Resources curated by the federal government, specifically for caregivers.
+        <br></br>
+        <a href="https://alzfdn.org/caregiving-resources/" target="_blank" > Alzheimer's Foundation of America</a> - Access to a national toll-free helpline, caregiver support groups, tips for caregivers, webinars, therapeutic programming for patients, and guidance on creating a dementia-friendly living space.
+      <h2>Additional Information </h2>
+        <p>Out of an abundance of caution, you should consult with your physician about screening for the diseases below, which commonly occur alongside Alzheimer's:</p>
         <ul>
           <li>Diabetes</li>
           <li>Depression</li>
@@ -19,7 +29,6 @@ export default function Resources() {
           <li><a href="https://my.clevelandclinic.org/health/articles/7040-gastrointestinal-diseases" target="_blank">Cleveland Clinic - Gastrointestinal diseases</a></li>
           <li><a href="https://www.niams.nih.gov/health-topics/osteoporosis#:~:text=Osteoporosis%20is%20a%20bone%20disease,of%20fractures%20(broken%20bones)." target="_blank">National Institutes of Health - Osteoporosis</a></li>
         </ul>
-        <p>Alzheimer's Disease can be physically and emotionally taxing - on the patient as well as loved ones and caregivers. We encourage you to explore support options. The <a href="https://www.alz.org/norcal/helping_you/support_groups#:~:text=To%20find%20a%20caregiver%20support,3900." target="_blank"> Alzheimer's Association</a> offers support groups for patients and caregivers.</p>
     </div>
     </div>
   );

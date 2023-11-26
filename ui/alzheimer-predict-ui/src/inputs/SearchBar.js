@@ -24,7 +24,7 @@ function SearchBar({handleFoundPatient, handlePatientNameEntered}) {
             <input
                 className="searchbar-input"
                 type="text"
-                placeholder="Enter Name / Search by Name or Patient ID"
+                placeholder="Enter Patient ID"
                 value={value}
                 onChange={(e) => {
                     handlePatientNameEntered(e);

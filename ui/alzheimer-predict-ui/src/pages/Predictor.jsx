@@ -103,29 +103,36 @@ function Predictor() {
   return (
     <Container>
       <Row>
+      <h2>Instructions</h2>
+      <p><b>For patients in the database:</b> Enter the patient ID and click submit. The remaining fields will populate with the patient's most up-to-date data. You can manually adjust any field after population to update patient information.</p>
+      <p><b>For patients NOT in the database:</b> Leave patient ID field blank and fill in any fields you have available and click submit.</p>
       <Col sm={8}>
         <Stack gap={3}>
-        <div className="p-2">
-        <h2>Enter Name / Search By Name Or Patient ID</h2>
+        <h2>Patient ID</h2>
         < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
-        </div>
-        <div className="p-2">
         <form onSubmit={handleSubmit}>
-          <h2>APOE4 Allele Information</h2>
-          <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'How many copies of the 4 allele does this individual have?'handleChange={handleChange} value={APOE4} />
-          <h2>Clinical Information</h2>
+          <h2>Alzheimer's-Specific Information</h2>
           <div className="form-data">
-            <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'MMSE Score:' handleChange={handleChange} value={MMSE} />
+          <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'Number of copies of the APOE4 allele (0-4):'handleChange={handleChange} value={APOE4} />
+          <br></br>
+          <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'Most recent score on the Mini-Mental State Examination (MMSE):' handleChange={handleChange} value={MMSE} />
+          <br></br>
+          </div>
+          <h2>Additional Information</h2>
+          <div className="form-data">
             <TextNumberInput input_type = 'N' name = 'Age'input_text = 'Age:' handleChange={handleChange} value={Age} />
+            <br></br>
             <TextNumberInput input_type = 'T' name = 'Gender' input_text = 'Gender:' handleChange={handleChange} value={Gender} />
-            <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Education:' handleChange={handleChange} value={Years_of_Education} />
+            <br></br>
             <TextNumberInput input_type = 'T' name = 'Race' input_text = 'Race:' handleChange={handleChange} value={Race} />
+            <br></br>
+            <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Years of Education:' handleChange={handleChange} value={Years_of_Education} />
+            <br></br>
           </div>
           <div className="submit-container">
             <input type="submit" />
           </div>
         </form>
-        </div>
         </Stack>
       </Col>
       <Col sm={4}>
