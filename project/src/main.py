@@ -144,24 +144,26 @@ def db_tuple_to_numpy(input_tuple):
 def patient(id: str = None):
     if id == None or id.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
-    
     connection = get_sql_connection()
-    
-    record = query_db(connection, "SELECT * FROM patients WHERE patient_id='{}';".format(id), fetch_all=False)
-    if (record == None):
-        raise HTTPException(status_code=404, detail="Patient Not Found")
-    patient_record = Patient(id=record[0], patient_id=record[1], created_at=record[2].isoformat())
-    return patient_record
+    try:
+        record = query_db(connection, "SELECT * FROM patients WHERE patient_id='{}';".format(id), fetch_all=False)
+        if (record == None):
+            raise HTTPException(status_code=404, detail="Patient Not Found")
+        patient_record = Patient(id=record[0], patient_id=record[1], created_at=record[2].isoformat())
+        return patient_record
+    except:
+        connection.rollback()
+        raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
 
 @app.post("/patient", status_code=201)
 def patient(patient: str = None):
     if patient == None or patient.strip() == "":
         raise HTTPException(status_code=400, detail="the server will not process this request due to missing patient.")
     connection = get_sql_connection()
-    record = query_db(connection, "SELECT * FROM patients WHERE patient_id='{}';".format(patient), fetch_all=False)
-    if (record is not None):
-        raise HTTPException(status_code=400, detail="Patient already exists.")
     try:
+        record = query_db(connection, "SELECT * FROM patients WHERE patient_id='{}';".format(patient), fetch_all=False)
+        if (record is not None):
+            raise HTTPException(status_code=400, detail="Patient already exists.")
         cursor = connection.cursor()
         cursor.execute("INSERT INTO patients(patient_id) VALUES('{}');".format(patient))
         connection.commit()
@@ -173,60 +175,82 @@ def patient(patient: str = None):
 @app.get("/patient/record", response_model=Records)
 def record(patient_id: str):
     connection = get_sql_connection()
-    records = query_db(connection, "SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability, created_at, updated_at FROM records WHERE patient_id='{}' ORDER BY updated_at DESC;".format(patient_id), fetch_all=True)
-    if (records == []):
-        raise HTTPException(status_code=404, detail="Patient History Not Found")
-    final_records = []
-    for record in records:
-        final_record = Record(id=record[0],
-                              patient_id=record[1],
-                              Diagnosis_at_Baseline=record[2],
-                              APOE4=record[3],
-                              MMSE=record[4],
-                              Age=record[5],
-                              Gender=record[6],
-                              Years_of_Education=record[7],
-                              Ethnicity=record[8],
-                              Race=record[9],
-                              ad_probability=record[10] if record[10] is not None else -1,
-                              created_at=record[11].isoformat(),
-                              updated_at=record[12].isoformat())
-        final_records.append(final_record)
-    return Records(records=final_records)
+    try:
+        records = query_db(connection, "SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability, created_at, updated_at FROM records WHERE patient_id='{}' ORDER BY updated_at DESC;".format(patient_id), fetch_all=True)
+        if (records == []):
+            raise HTTPException(status_code=404, detail="Patient History Not Found")
+        final_records = []
+        for record in records:
+            final_record = Record(id=record[0],
+                                patient_id=record[1],
+                                Diagnosis_at_Baseline=record[2],
+                                APOE4=record[3],
+                                MMSE=record[4],
+                                Age=record[5],
+                                Gender=record[6],
+                                Years_of_Education=record[7],
+                                Ethnicity=record[8],
+                                Race=record[9],
+                                ad_probability=record[10] if record[10] is not None else -1,
+                                created_at=record[11].isoformat(),
+                                updated_at=record[12].isoformat())
+            final_records.append(final_record)
+        return Records(records=final_records)
+    except:
+        connection.rollback()
+        raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
 
 @app.post("/patient/record", status_code=201)
 def record(new_record: InputRecord):
     connection = get_sql_connection()
-    records = query_db(connection, "SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability FROM records WHERE patient_id='{}' and Diagnosis_at_Baseline='{}' and APOE4={} and MMSE={} and Age={} ORDER BY created_at ASC LIMIT 1;".format(new_record.patient_id, new_record.Diagnosis_at_Baseline, new_record.APOE4, new_record.MMSE, new_record.Age), fetch_all=True)
-    if (records != []):
-        raise HTTPException(status_code=400, detail="Record already exists")
-    
-    ## Get Patient to get Image Array from
-    original_record = query_db("SELECT * FROM records WHERE patient_id='ABC' ORDER BY created_at ASC LIMIT 1;", fetch_all=True)
-    ## Get Columns to create insert query
-    columns = query_db(connection, "SELECT column_name FROM information_schema.columns WHERE table_name = 'records' order by ordinal_position ASC;", fetch_all=True)
-    
-    insert_query = "INSERT INTO records("
-    for column in columns:
-        if column[0] != "id" and column[0] != "created_at" and column[0] != "updated_at":
-            insert_query = insert_query + column[0] + ","
-    insert_query = insert_query[:len(insert_query)-1]
-    insert_query = insert_query + ") VALUES('"
-    insert_query = insert_query + str(new_record.patient_id) + "',"
-    insert_query = insert_query + str(new_record.ad_probability) + ","
-    insert_query = insert_query + "'" + str(new_record.Diagnosis_at_Baseline) + "',"
-    insert_query = insert_query + str(new_record.Age) + ","
-    insert_query = insert_query + "'" + str(new_record.Gender) + "',"
-    insert_query = insert_query + str(new_record.Years_of_Education) + ","
-    insert_query = insert_query +  "'" + str(new_record.Ethnicity) + "',"
-    insert_query = insert_query +  "'" + str(new_record.Race) + "',"
-    insert_query = insert_query + str(new_record.APOE4) + ","
-    insert_query = insert_query + str(new_record.MMSE) + ","
-    for value in range(11, len(original_record[0]) - 2):
-        insert_query = insert_query + str(original_record[0][value]) + ","
-    insert_query = insert_query[:len(insert_query)-1]
-    insert_query = insert_query + ");"
     try:
+        records = query_db(connection, "SELECT id, patient_id, Diagnosis_at_Baseline, APOE4, MMSE, Age, Gender, Years_of_Education, Ethnicity, Race, ad_probability FROM records WHERE patient_id='{}' and Diagnosis_at_Baseline='{}' and APOE4={} and MMSE={} and Age={} ORDER BY created_at ASC LIMIT 1;".format(new_record.patient_id, new_record.Diagnosis_at_Baseline, new_record.APOE4, new_record.MMSE, new_record.Age), fetch_all=True)
+        if (records != []):
+            raise HTTPException(status_code=400, detail="Record already exists")
+        
+        ## Get Patient to get Image Array from
+        original_record = query_db(connection, "SELECT * FROM records WHERE patient_id='{}' ORDER BY created_at ASC LIMIT 1;".format(new_record.patient_id), fetch_all=True)
+        if original_record == []:
+            original_record = query_db(connection, "SELECT * FROM records WHERE patient_id='022_S_0004' ORDER BY created_at ASC LIMIT 1;", fetch_all=True)
+        ## Get Columns to create insert query
+        columns = query_db(connection, "SELECT column_name FROM information_schema.columns WHERE table_name = 'records' order by ordinal_position ASC;", fetch_all=True)
+        
+        insert_query = "INSERT INTO records("
+        for column in columns:
+            if column[0] != "id" and column[0] != "created_at" and column[0] != "updated_at":
+                insert_query = insert_query + column[0] + ","
+        insert_query = insert_query[:len(insert_query)-1]
+        insert_query = insert_query + ") VALUES('"
+        insert_query = insert_query + str(new_record.patient_id) + "',"
+        insert_query = insert_query + str(new_record.ad_probability) + ","
+        insert_query = insert_query + "'" + str(new_record.Diagnosis_at_Baseline) + "',"
+        insert_query = insert_query + str(new_record.Age) + ","
+        insert_query = insert_query + "'" + str(new_record.Gender) + "',"
+        insert_query = insert_query + str(new_record.Years_of_Education) + ","
+        insert_query = insert_query +  "'" + str(new_record.Ethnicity) + "',"
+        insert_query = insert_query +  "'" + str(new_record.Race) + "',"
+        insert_query = insert_query + str(new_record.APOE4) + ","
+        insert_query = insert_query + str(new_record.MMSE) + ","
+        for value in range(11, len(original_record[0]) - 2):
+            insert_query = insert_query + str(original_record[0][value]) + ","
+        insert_query = insert_query[:len(insert_query)-1]
+        insert_query = insert_query + ");"
+
+        cursor = connection.cursor()
+        cursor.execute(insert_query)
+        connection.commit()
+    except:
+        connection.rollback()
+        raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
+    return {"message": "Success"}
+
+@app.put("/patient/record", status_code=200)
+def record(update_record: InputRecord):
+    connection = get_sql_connection()
+    try:
+        print(update_record)
+        insert_query = "UPDATE records SET ad_probability = {} WHERE patient_id = '{}' and Diagnosis_at_Baseline = '{}' and Age = {} and APOE4 = {} and MMSE = {}".format(update_record.ad_probability, update_record.patient_id, update_record.Diagnosis_at_Baseline, update_record.Age, update_record.APOE4, update_record.MMSE)
+        print(insert_query)
         cursor = connection.cursor()
         cursor.execute(insert_query)
         connection.commit()
@@ -240,21 +264,21 @@ async def predict(id: str = None):
     try:
         connection = get_sql_connection()
         # Pull Record for model
-        record = query_db(connection, "SELECT * FROM records WHERE id='{}';".format(id), fetch_all=False)
-        
+        record = query_db(connection, "SELECT * FROM records WHERE patient_id='{}' Order by created_at limit 1;".format(id), fetch_all=False)
+
         # Error message if patient not found
         if (record == None):
-            return HTTPException(status_code=400, detail=f"Record {id} not found in DB!")
+            raise HTTPException(status_code=400, detail=f"Record {id} not found in DB!")
         
         # Convert JSON string to model input
         arr = db_tuple_to_numpy(record)
         
         # Generate prediction
         prediction = model.predict(arr)[0][0]*100
-        
+
         return {"ad_probability": prediction}
     except Exception as e:
-        return HTTPException(status_code=400, detail=f"Error occurred: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error occurred: {str(e)}")
 
 @app.get("/reset")
 def reset():

@@ -73,3 +73,52 @@ export function addHistoryForPatient(inputs) {
             console.log(err.message);
         })
 }
+
+export function updateHistoryForPatient(inputs) {
+    let options = {
+        method: "PUT",
+        headers: {
+            "Content-Type":"application/json",
+        },
+        body: JSON.stringify({
+            "patient_id": inputs.patient_id,
+            "Diagnosis_at_Baseline": inputs.Diagnosis_at_Baseline,
+            "APOE4": inputs.APOE4,
+            "MMSE": inputs.MMSE,
+            "Age": inputs.Age,
+            "Gender": inputs.Gender,
+            "Years_of_Education": inputs.Years_of_Education,
+            "Ethnicity": inputs.Ethnicity,
+            "Race": inputs.Race,
+            "ad_probability": inputs.ad_probability
+        })
+    }
+    console.log(options)
+    return fetch(`${host}patient/record`, options)
+        .then((response) => {
+            if(!response.ok) {
+                throw new Error(response.status + ": " + response.statusText)
+            }
+            return response.json()
+        })
+        .then((success) => {
+            return success
+        })
+        .catch((err) => {
+            console.log(err.message);
+        })
+}
+
+export function getPrediction(id) {
+    return fetch(`${host}predict?id=${id}`)
+        .then((response) => {
+            console.log(response);
+            return response.json() 
+        })
+        .then((prediction) => {
+            return prediction
+        })
+        .catch((err) => {
+            console.log(err.message);
+        })
+}

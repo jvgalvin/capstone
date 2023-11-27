@@ -16,7 +16,7 @@ import TextNumberInput from '../inputs/TextNumberInput.js';
 import ResultInput from '../inputs/ResultInput';
 import SearchBar from '../inputs/SearchBar';
 import History from '../inputs/History';
-import { getPatientHistory, addPatient, getPatientByNameID, addHistoryForPatient } from '../DatabaseConnection.js';
+import { getPatientHistory, addPatient, getPatientByNameID, addHistoryForPatient, getPrediction, updateHistoryForPatient } from '../DatabaseConnection.js';
 
 function Predictor() {
 
@@ -106,7 +106,7 @@ function Predictor() {
       alert("Please enter Patient name")
     } else {
       let patient_in_memory = patient
-      if(Object.keys(patient_in_memory).length === 0) {
+      if(patient_in_memory == null || Object.keys(patient_in_memory).length === 0) {
         await addPatient(patientName)
         patient_in_memory = await getPatientByNameID(patientName)
         console.log(patient_in_memory)
@@ -124,7 +124,21 @@ function Predictor() {
       let result = await addHistoryForPatient(final_inputs)
       console.log(result)
       if(result !== undefined) {
-        alert("Success Saving Patient " + patient_in_memory.patient_id)
+        if(final_inputs["ad_probability"] == -1) {
+          let prediction = await getPrediction(final_inputs["patient_id"])
+          console.log("Prediction: " + prediction["ad_probability"]);
+          final_inputs["ad_probability"] = prediction["ad_probability"]
+          adProbability.current.value = prediction["ad_probability"]
+          let result = await updateHistoryForPatient(final_inputs)
+          console.log(result)
+          if(result !== undefined) {
+            alert("Success Saving Patient " + patient_in_memory.patient_id)
+          } else {
+            alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+          }
+        } else {
+          alert("Success Saving Patient " + patient_in_memory.patient_id)
+        }
       } else {
         alert("There was an error Saving Patient " + patient_in_memory.patient_id)
       }
