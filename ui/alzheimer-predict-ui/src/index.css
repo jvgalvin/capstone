@@ -17,7 +17,8 @@ body {
   font-family: 'Nunito', Arial, sans-serif;
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 400px;
+  margin-bottom: 100px;
   background-size: auto 100%;
   color: var(--dark-navy);
 }
@@ -34,16 +35,6 @@ body {
   width: 100%;
   background-color: var(--opacity-dark-navy);
   color: var(--off-white);
-}
-
-.footerLink {
-  padding: 4%;
-  color: var(--off-white);
-  text-decoration: none;
-}
-
-.footerLink:hover {
-  color: var(--pink);
 }
 
 /* Main menu section css */
