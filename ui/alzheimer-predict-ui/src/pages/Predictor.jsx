@@ -140,7 +140,22 @@ function Predictor() {
           alert("Success Saving Patient " + patient_in_memory.patient_id)
         }
       } else {
-        alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+        console.log("There was an error Saving Patient " + patient_in_memory.patient_id)
+        if(final_inputs["ad_probability"] == -1) {
+          let prediction = await getPrediction(final_inputs["patient_id"])
+          console.log("Prediction: " + prediction["ad_probability"]);
+          final_inputs["ad_probability"] = prediction["ad_probability"]
+          adProbability.current.value = prediction["ad_probability"]
+          let result = await updateHistoryForPatient(final_inputs)
+          console.log(result)
+          if(result !== undefined) {
+            alert("Success Saving Patient " + patient_in_memory.patient_id)
+          } else {
+            alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+          }
+        } else {
+          alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+        }
       }
     }
   }
