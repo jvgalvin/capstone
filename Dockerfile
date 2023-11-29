@@ -36,10 +36,10 @@ RUN node --version
 RUN npm --version
 
 # Upgrade NPM
-RUN npm update -g npm
+# RUN npm update -g npm
 
 # Install PG for node JS
-RUN npm install
+# RUN npm install
 
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip
@@ -51,10 +51,26 @@ RUN pip install -r requirements.txt
 COPY ./setup-db.sh ./
 COPY ./ui/alzheimer-predict-ui/src/setup.js ./ui/alzheimer-predict-ui/src/
 
+EXPOSE 80
 EXPOSE 3000
+EXPOSE 5000
 EXPOSE 8000
+EXPOSE 8080
 
-CMD ["bash", "setup-db.sh"]
+# Install Kubectl
+RUN curl -LO 'https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
+RUN curl -LO "https://dl.k8s.io/v1.22.0/bin/linux/amd64/kubectl.sha256"
+RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# Install Minikube
+RUN apt-get update
+RUN apt install -y conntrack
+RUN curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+RUN install minikube-linux-amd64 /usr/local/bin/minikube
+RUN sysctl net/netfilter/nf_conntrack_max=524288
+
+
+# CMD ["bash", "setup-db.sh"]
 
 # CMD ["poetry", "run", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
 

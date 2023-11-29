@@ -163,31 +163,35 @@ function Predictor() {
   return (
     <Container>
       <Row>
+        <h2>Instructions</h2>
+        <p><b>For patients in the database:</b> Type patient ID and hit ENTER. Available data will pre-populate in the remaining fields. If necessary, modify any values, otherwise, click Submit and read the prediction from "AD Probability".</p>
+        <p><b>For patients NOT in the database:</b> Leave patient ID blank. Enter available data in the blank fields. Click Submit and read the prediction from "AD Probability".</p>
       <Col sm={8}>
         <Stack gap={3}>
-        <div className="p-2">
-        <h2>Enter Name / Search By Name Or Patient ID</h2>
+        <h2>Enter Patient ID</h2>
         < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
-        </div>
-        <div className="p-2">
         <form onSubmit={handleSubmit}>
-          <h2>APOE4 Allele Information</h2>
-          <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'How many copies of the 4 allele does this individual have?'handleChange={handleChange} value={APOE4} />
-          <h2>Clinical Information</h2>
+          <h2>Alzheimer's-Specific Information</h2>
+          <TextNumberInput input_type = 'T' name = 'Diagnosis_at_Baseline' input_text = 'Current Diagnosis (Enter CN for Normal, LMCI for Mild Cognitive Impairment):' handleChange={handleChange} value={Diagnosis_at_Baseline} />
+          <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'Number of copies of the APOE4 allele (0-4):'handleChange={handleChange} value={APOE4} />
+          <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'Most recent score on the Mini-Mental State Exam (MMSE):' handleChange={handleChange} value={MMSE} />
+          <h2>Additional Information</h2>
           <div className="form-data">
-            <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'MMSE Score:' handleChange={handleChange} value={MMSE} />
-            <TextNumberInput input_type = 'T' name = 'Diagnosis_at_Baseline' input_text = 'Diagnosis_at_Baseline:' handleChange={handleChange} value={Diagnosis_at_Baseline} />
             <TextNumberInput input_type = 'N' name = 'Age'input_text = 'Age:' handleChange={handleChange} value={Age} />
+            <br></br>
             <TextNumberInput input_type = 'T' name = 'Gender' input_text = 'Gender:' handleChange={handleChange} value={Gender} />
-            <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Education:' handleChange={handleChange} value={Years_of_Education} />
+            <br></br>
             <TextNumberInput input_type = 'T' name = 'Race' input_text = 'Race:' handleChange={handleChange} value={Race} />
+            <br></br>
             <TextNumberInput input_type = 'T' name = 'Ethnicity' input_text = 'Ethnicity:' handleChange={handleChange} value={Ethnicity} />
+            <br></br>
+            <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Years of Education:' handleChange={handleChange} value={Years_of_Education} />
+            <br></br>
           </div>
           <div className="submit-container">
             <input type="submit" />
           </div>
         </form>
-        </div>
         </Stack>
       </Col>
       <Col sm={4}>
