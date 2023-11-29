@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start minikube
-minikube start --force
+minikube start --driver=docker --force
 
 # Remove existing minikube images
 minikube image rm landmund/fastapi:20231120
