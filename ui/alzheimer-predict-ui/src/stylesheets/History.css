@@ -1,0 +1,18 @@
+.history-container {
+    overflow-y: scroll;
+    background-color: white;
+    max-height: 20rem;
+    width: 100%;
+    height: fit-content;
+    margin-bottom: 10px;
+}
+
+.history-row {
+    box-sizing: border-box;
+    padding: 10px 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgray;
+}

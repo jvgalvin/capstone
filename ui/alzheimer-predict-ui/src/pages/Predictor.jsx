@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import '../stylesheets/App.css';
 import '../stylesheets/TextNumberInput.css'
 import '../stylesheets/SearchBar.css'
+import '../stylesheets/History.css'
 import TextNumberInput from '../inputs/TextNumberInput.js';
 import ResultInput from '../inputs/ResultInput';
 import SearchBar from '../inputs/SearchBar';
@@ -140,18 +141,33 @@ function Predictor() {
           alert("Success Saving Patient " + patient_in_memory.patient_id)
         }
       } else {
-        alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+        console.log("There was an error Saving Patient " + patient_in_memory.patient_id)
+        if(final_inputs["ad_probability"] == -1) {
+          let prediction = await getPrediction(final_inputs["patient_id"])
+          console.log("Prediction: " + prediction["ad_probability"]);
+          final_inputs["ad_probability"] = prediction["ad_probability"]
+          adProbability.current.value = prediction["ad_probability"]
+          let result = await updateHistoryForPatient(final_inputs)
+          console.log(result)
+          if(result !== undefined) {
+            alert("Success Saving Patient " + patient_in_memory.patient_id)
+          } else {
+            alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+          }
+        } else {
+          alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+        }
       }
     }
   }
 
   return (
-    <Container>
+    <Container fluid={true}>
       <Row>
         <h2>Instructions</h2>
         <p><b>For patients in the database:</b> Type patient ID and hit ENTER. Available data will pre-populate in the remaining fields. If necessary, modify any values, otherwise, click Submit and read the prediction from "AD Probability".</p>
         <p><b>For patients NOT in the database:</b> Leave patient ID blank. Enter available data in the blank fields. Click Submit and read the prediction from "AD Probability".</p>
-      <Col sm={8}>
+      <Col>
         <Stack gap={3}>
         <h2>Enter Patient ID</h2>
         < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
@@ -179,7 +195,7 @@ function Predictor() {
         </form>
         </Stack>
       </Col>
-      <Col sm={4}>
+      <Col>
       <Stack gap={4}>
       <div className="p-2">
         <h2>Patient History</h2>
