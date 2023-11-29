@@ -16,8 +16,8 @@ RUN apt-get update \
         libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY package.json /app
-COPY package-lock.json /app
+COPY ./ui/alzheimer-predict-ui/package.json /app
+COPY ./ui/alzheimer-predict-ui/package-lock.json /app
 
 # Install node JS in container
 ENV NODE_VERSION=20.8.0
@@ -33,7 +33,7 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 RUN npm install
 
 # Copy all files
-COPY . ./
+COPY ./ui/alzheimer-predict-ui/ ./
 
 # Run NPM Start
 CMD ["npm", "start"]

@@ -9,4 +9,4 @@ EXPOSE 3000
 EXPOSE 8000
 EXPOSE 5432
 
-COPY init.sql /docker-entrypoint-initdb.d/
+COPY ./db_container/init.sql /docker-entrypoint-initdb.d/

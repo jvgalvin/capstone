@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start minikube
-minikube start
+minikube start --force
 
 # Remove existing minikube images
 minikube image rm landmund/fastapi:20231120
@@ -22,3 +22,6 @@ docker build . -t landmund/nodejs:20231120 -f ui/alzheimer-predict-ui/Dockerfile
 minikube image load landmund/fastapi:20231120
 minikube image load landmund/postgres:20231120
 minikube image load landmund/nodejs:20231120
+
+# Call launch script
+bash ./launch-kube.sh
