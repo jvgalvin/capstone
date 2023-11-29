@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import '../stylesheets/App.css';
 import '../stylesheets/TextNumberInput.css'
 import '../stylesheets/SearchBar.css'
+import '../stylesheets/History.css'
 import TextNumberInput from '../inputs/TextNumberInput.js';
 import ResultInput from '../inputs/ResultInput';
 import SearchBar from '../inputs/SearchBar';
@@ -161,12 +162,12 @@ function Predictor() {
   }
 
   return (
-    <Container>
+    <Container fluid={true}>
       <Row>
         <h2>Instructions</h2>
         <p><b>For patients in the database:</b> Type patient ID and hit ENTER. Available data will pre-populate in the remaining fields. If necessary, modify any values, otherwise, click Submit and read the prediction from "AD Probability".</p>
         <p><b>For patients NOT in the database:</b> Leave patient ID blank. Enter available data in the blank fields. Click Submit and read the prediction from "AD Probability".</p>
-      <Col sm={8}>
+      <Col>
         <Stack gap={3}>
         <h2>Enter Patient ID</h2>
         < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
@@ -194,7 +195,7 @@ function Predictor() {
         </form>
         </Stack>
       </Col>
-      <Col sm={4}>
+      <Col>
       <Stack gap={4}>
       <div className="p-2">
         <h2>Patient History</h2>

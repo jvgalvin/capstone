@@ -1,5 +1,16 @@
 .suggestion-container {
     cursor: pointer;
+    box-sizing: border-box;
+    padding: 1px 10px;
+    height: 2rem;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgray;
+}
+
+.suggestion-container:hover {
+    background-color: #f3f3f3;
 }
 
 .searchbar-input {
@@ -9,7 +20,7 @@
     box-sizing: border-box;
     padding: 1px 10px;
     transition: 0.2s ease-in-out;
-    width: 100%;
+    width: 50%;
 }
 
 .searchbar-input:focus {
