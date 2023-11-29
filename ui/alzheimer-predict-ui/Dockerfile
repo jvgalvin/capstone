@@ -1,23 +1,33 @@
-# Build image
-FROM node:20-alpine
+FROM debian:11-slim as build
 
 RUN mkdir /app
 WORKDIR /app
 
-# EXPOSE 80
+EXPOSE 80
 EXPOSE 3000
 # EXPOSE 5432
 # EXPOSE 8000
 # EXPOSE 8080
 
-RUN node --version
-RUN npm --version
+RUN apt-get update \
+    && apt-get install -y \
+        curl \
+        build-essential \
+        libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY package.json /app
 COPY package-lock.json /app
 
-# Upgrade NPM
-# RUN npm update -g npm
+# Install node JS in container
+ENV NODE_VERSION=20.8.0
+RUN apt install -y curl
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
 # Run NPM Install
 RUN npm install
