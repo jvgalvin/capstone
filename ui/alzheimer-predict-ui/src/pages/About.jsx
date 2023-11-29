@@ -88,10 +88,10 @@ export default function About() {
         <Accordion.Header>Training Data</Accordion.Header>
         <Accordion.Body>
           Training data was gathered from the Alzheimer's Disease Neuroimaging Initiative (ADNI). Complete information for the dataset can be found at <a href="https://adni.loni.usc.edu/about/" target="_blank">adni.loni.usc.edu</a>.
-          <div id="content">
+          {/* <div id="content">
             <iframe width="1000px" height="1000px" frameborder="0" src="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ca&#47;Capstone_16965503257270&#47;Dashboard1&#47;1_rss.png"></iframe>
-        </div>
-        <AlzheimerTableau />
+        </div> */}
+        <AlzheimerTableau></AlzheimerTableau>
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
