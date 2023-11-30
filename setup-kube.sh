@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Start minikube
-minikube start --driver=docker
-
 # Remove existing minikube images
 minikube image rm landmund/fastapi:20231120
 minikube image rm landmund/postgres:20231120
