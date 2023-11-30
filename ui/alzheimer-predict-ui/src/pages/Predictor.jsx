@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import '../stylesheets/App.css';
 import '../stylesheets/TextNumberInput.css'
 import '../stylesheets/SearchBar.css'
+import '../stylesheets/ResultInput.css'
 import '../stylesheets/History.css'
 import TextNumberInput from '../inputs/TextNumberInput.js';
 import ResultInput from '../inputs/ResultInput';
@@ -173,24 +174,21 @@ function Predictor() {
         < SearchBar handleFoundPatient={handleFoundPatient} handlePatientNameEntered={handlePatientNameEntered}/>
         <form onSubmit={handleSubmit}>
           <h2>Alzheimer's-Specific Information</h2>
-          <TextNumberInput input_type = 'T' name = 'Diagnosis_at_Baseline' input_text = 'Current Diagnosis (Enter CN for Normal, LMCI for Mild Cognitive Impairment):' handleChange={handleChange} value={Diagnosis_at_Baseline} />
-          <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'Number of copies of the APOE4 allele (0-4):'handleChange={handleChange} value={APOE4} />
-          <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'Most recent score on the Mini-Mental State Exam (MMSE):' handleChange={handleChange} value={MMSE} />
+          <div className="form-data">
+            <TextNumberInput input_type = 'T' name = 'Diagnosis_at_Baseline' input_text = 'Current Diagnosis (Enter CN for Normal, LMCI for Mild Cognitive Impairment):' handleChange={handleChange} value={Diagnosis_at_Baseline} />
+            <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'Number of copies of the APOE4 allele (0-4):'handleChange={handleChange} value={APOE4} />
+            <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'Most recent score on the Mini-Mental State Exam (MMSE):' handleChange={handleChange} value={MMSE} />
+          </div>
           <h2>Additional Information</h2>
           <div className="form-data">
             <TextNumberInput input_type = 'N' name = 'Age'input_text = 'Age:' handleChange={handleChange} value={Age} />
-            <br></br>
             <TextNumberInput input_type = 'T' name = 'Gender' input_text = 'Gender:' handleChange={handleChange} value={Gender} />
-            <br></br>
             <TextNumberInput input_type = 'T' name = 'Race' input_text = 'Race:' handleChange={handleChange} value={Race} />
-            <br></br>
             <TextNumberInput input_type = 'T' name = 'Ethnicity' input_text = 'Ethnicity:' handleChange={handleChange} value={Ethnicity} />
-            <br></br>
             <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Years of Education:' handleChange={handleChange} value={Years_of_Education} />
-            <br></br>
           </div>
           <div className="submit-container">
-            <input type="submit" />
+            <Button variant="contained" type="submit">Submit</Button>
           </div>
         </form>
         </Stack>
