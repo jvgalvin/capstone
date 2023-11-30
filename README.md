@@ -17,6 +17,10 @@ Application for the detection of dementia in Alzheimer's patients
 
 # How to build containers and Kubernetes deployment
 
+## 0. Prerequisites
+- Make sure that `minikube` is active (run `minikube start`)
+- Delete the `node_modules` folder in the `ui\alzheimer-predict-ui`
+
 ## 1. Build API Container:
 1. Navigate to the `/capstone/project` folder
 2. Run the following command: `docker build -t <dockerhub_username>/<image_name>:<tag> .` (this will help label the image)

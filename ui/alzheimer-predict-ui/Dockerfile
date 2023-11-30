@@ -29,11 +29,17 @@ RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
 ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
+# Upgrade NPM and remove any modules
+RUN npm install -g npm@latest
+RUN rm -rf node_modules
+
 # Run NPM Install
 RUN npm install
 
 # Copy all files
-COPY ./ui/alzheimer-predict-ui/ ./
+COPY ./ui/alzheimer-predict-ui/. ./
 
 # Run NPM Start
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
+# CMD ["bash"]
+# CMD ["bash", "start.sh"]
