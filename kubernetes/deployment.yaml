@@ -13,6 +13,14 @@ spec:
         app: myapp
     spec:
       containers:
+      - name: nodejs
+        image: landmund/nodejs:20231120
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: 4Gi
+            cpu: "2"
       - name: myapp
         image: landmund/fastapi:20231120
         ports:
