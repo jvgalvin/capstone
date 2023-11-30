@@ -31,7 +31,7 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
 # Upgrade NPM and remove any modules
 RUN npm install -g npm@latest
-RUN rm -rf node_modules
+# RUN rm -rf node_modules
 
 # Run NPM Install
 RUN npm install
@@ -40,6 +40,4 @@ RUN npm install
 COPY ./ui/alzheimer-predict-ui/. ./
 
 # Run NPM Start
-# CMD ["npm", "start"]
-# CMD ["bash"]
-# CMD ["bash", "start.sh"]
+CMD ["npm", "start"]
