@@ -24,7 +24,7 @@ RUN . ${APP_DIR}/venv/bin/activate
 # RUN poetry install
 
 # Install node JS in container
-ENV NODE_VERSION=20.10.0
+ENV NODE_VERSION=20.8.0
 RUN apt install -y curl
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 ENV NVM_DIR=/root/.nvm

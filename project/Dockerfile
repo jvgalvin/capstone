@@ -18,7 +18,7 @@ ENV PATH /root/.local/bin:$PATH
 
 # Copy all files
 WORKDIR ${APP_DIR}
-COPY ./ ./
+COPY ./project ./
 
 RUN python -m venv --copies ${APP_DIR}/venv
 RUN . ${APP_DIR}/venv/bin/activate
@@ -28,7 +28,7 @@ RUN . ${APP_DIR}/venv/bin/activate
 RUN python3 -m pip install --upgrade pip
 
 # Install python requirements
-COPY ./requirements.txt ./
+COPY ./project/requirements.txt ./
 RUN pip install -r requirements.txt
 
 EXPOSE 80
@@ -38,5 +38,5 @@ EXPOSE 5432
 
 ENV MODEL_OBJECT_PATH "./src/"
 
-# Run uvicorn on 0.0.0.0:80
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Run uvicorn on 0.0.0.0:8000
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -16,7 +16,7 @@ spec:
       - name: myapp
         image: landmund/fastapi:20231120
         ports:
-        - containerPort: 80
+        - containerPort: 8000
         resources:
           limits:
             memory: 4Gi
