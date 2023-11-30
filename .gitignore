@@ -6,3 +6,5 @@
 /data/Data*
 *.DS_Store
 project/src/__pycache__/
+
+/node_modules
