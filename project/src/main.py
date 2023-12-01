@@ -151,6 +151,9 @@ def patient(id: str = None):
             raise HTTPException(status_code=404, detail="Patient Not Found")
         patient_record = Patient(id=record[0], patient_id=record[1], created_at=record[2].isoformat())
         return patient_record
+    except HTTPException as e:
+        connection.rollback()
+        raise e
     except:
         connection.rollback()
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
@@ -167,6 +170,9 @@ def patient(patient: str = None):
         cursor = connection.cursor()
         cursor.execute("INSERT INTO patients(patient_id) VALUES('{}');".format(patient))
         connection.commit()
+    except HTTPException as e:
+        connection.rollback()
+        raise e
     except:
         connection.rollback()
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
@@ -196,6 +202,9 @@ def record(patient_id: str):
                                 updated_at=record[12].isoformat())
             final_records.append(final_record)
         return Records(records=final_records)
+    except HTTPException as e:
+        connection.rollback()
+        raise e
     except:
         connection.rollback()
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
@@ -239,6 +248,9 @@ def record(new_record: InputRecord):
         cursor = connection.cursor()
         cursor.execute(insert_query)
         connection.commit()
+    except HTTPException as e:
+        connection.rollback()
+        raise e
     except:
         connection.rollback()
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
@@ -254,6 +266,9 @@ def record(update_record: InputRecord):
         cursor = connection.cursor()
         cursor.execute(insert_query)
         connection.commit()
+    except HTTPException as e:
+        connection.rollback()
+        raise e
     except:
         connection.rollback()
         raise HTTPException(status_code=400, detail="the server could not process your request. Please try again.")
@@ -277,7 +292,11 @@ async def predict(id: str = None):
         prediction = model.predict(arr)[0][0]*100
 
         return {"ad_probability": prediction}
+    except HTTPException as e:
+        connection.rollback()
+        raise e
     except Exception as e:
+        connection.rollback()
         raise HTTPException(status_code=400, detail=f"Error occurred: {str(e)}")
 
 @app.get("/reset")
