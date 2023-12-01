@@ -124,8 +124,7 @@ function Predictor() {
       console.log(final_inputs)
       //adProbability.current.value = 71;
       let result = await addHistoryForPatient(final_inputs)
-      console.log(result)
-      if(result !== undefined) {
+      if(!(result instanceof Error)) {
         if(final_inputs["ad_probability"] == -1) {
           let prediction = await getPrediction(final_inputs["patient_id"])
           console.log("Prediction: " + prediction["ad_probability"]);
@@ -133,10 +132,10 @@ function Predictor() {
           adProbability.current.value = prediction["ad_probability"]
           let result = await updateHistoryForPatient(final_inputs)
           console.log(result)
-          if(result !== undefined) {
+          if(!(result instanceof Error)) {
             alert("Success Saving Patient " + patient_in_memory.patient_id)
           } else {
-            alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+            alert("There was an error Saving Patient " + result)
           }
         } else {
           alert("Success Saving Patient " + patient_in_memory.patient_id)
@@ -150,13 +149,13 @@ function Predictor() {
           adProbability.current.value = prediction["ad_probability"]
           let result = await updateHistoryForPatient(final_inputs)
           console.log(result)
-          if(result !== undefined) {
+          if(!(result instanceof Error)) {
             alert("Success Saving Patient " + patient_in_memory.patient_id)
           } else {
-            alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+            alert("There was an error Saving Patient " + result)
           }
         } else {
-          alert("There was an error Saving Patient " + patient_in_memory.patient_id)
+          alert("There was an error Saving Patient " + result)
         }
       }
     }

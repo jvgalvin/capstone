@@ -4,7 +4,11 @@ export function getPatientByNameID(value) {
     return fetch(`${host}patient?id=${value}`)
         .then((response) => {
             if(!response.ok) {
-                throw new Error(response.status + ": " + response.statusText)
+                return response.json().then(errorBody => {
+                    console.log(errorBody)
+                    const errorMessage = errorBody && errorBody.detail ? errorBody.detail : 'Unknown API error';
+                    throw new Error(errorMessage);
+                });
             }
             console.log(response)
             return response.json()
@@ -20,7 +24,16 @@ export function getPatientByNameID(value) {
 
 export function getPatientHistory(id) {
     return fetch(`${host}patient/record?patient_id=${id}`)
-        .then((response) => response.json())
+        .then((response) => {
+            if(!response.ok) {
+                return response.json().then(errorBody => {
+                    console.log(errorBody)
+                    const errorMessage = errorBody && errorBody.detail ? errorBody.detail : 'Unknown API error';
+                    throw new Error(errorMessage);
+                });
+            }
+            return response.json()
+        })
         .then((history) => {
             return history
         })
@@ -31,7 +44,16 @@ export function getPatientHistory(id) {
 
 export function addPatient(name) {
     return fetch(`${host}patient?patient=${name}`, {method: "POST"})
-        .then((response) => response.json())
+        .then((response) => {
+            if(!response.ok) {
+                return response.json().then(errorBody => {
+                    console.log(errorBody)
+                    const errorMessage = errorBody && errorBody.detail ? errorBody.detail : 'Unknown API error';
+                    throw new Error(errorMessage);
+                });
+            }
+            return response.json()
+        })
         .then((patient) => {
             return patient
         })
@@ -62,7 +84,11 @@ export function addHistoryForPatient(inputs) {
     return fetch(`${host}patient/record`, options)
         .then((response) => {
             if(!response.ok) {
-                throw new Error(response.status + ": " + response.statusText)
+                return response.json().then(errorBody => {
+                    console.log(errorBody)
+                    const errorMessage = errorBody && errorBody.detail ? errorBody.detail : 'Unknown API error';
+                    throw new Error(errorMessage);
+                });
             }
             return response.json()
         })
@@ -71,6 +97,7 @@ export function addHistoryForPatient(inputs) {
         })
         .catch((err) => {
             console.log(err.message);
+            return err;
         })
 }
 
@@ -97,7 +124,11 @@ export function updateHistoryForPatient(inputs) {
     return fetch(`${host}patient/record`, options)
         .then((response) => {
             if(!response.ok) {
-                throw new Error(response.status + ": " + response.statusText)
+                return response.json().then(errorBody => {
+                    console.log(errorBody)
+                    const errorMessage = errorBody && errorBody.detail ? errorBody.detail : 'Unknown API error';
+                    throw new Error(errorMessage);
+                });
             }
             return response.json()
         })
@@ -106,6 +137,7 @@ export function updateHistoryForPatient(inputs) {
         })
         .catch((err) => {
             console.log(err.message);
+            return err
         })
 }
 
