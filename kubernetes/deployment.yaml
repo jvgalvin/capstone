@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: myapp-deployment
 spec:
   replicas: 1
   selector:
@@ -17,6 +17,7 @@ spec:
         image: landmund/nodejs:20231120
         ports:
         - containerPort: 3000
+          protocol: TCP
         resources:
           limits:
             memory: 4Gi
@@ -25,6 +26,7 @@ spec:
         image: landmund/fastapi:20231120
         ports:
         - containerPort: 8000
+          protocol: TCP
         resources:
           limits:
             memory: 4Gi
