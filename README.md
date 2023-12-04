@@ -23,7 +23,7 @@ Application for the detection of dementia in Alzheimer's patients
 
 ## 1. Build images and load them to Minikube:
 - Run [kube-setup.sh](kube-setup.sh) to build the images and start up Kubernetes.
-- If the images have already been built and loaded to Minikube, run [kube-launch.sh](kube-launch.sh) instead.
+- If the images have already been built and loaded to Minikube, run [kube-start.sh](kube-start.sh) instead.
 - Use the URL provided at the end to access the UI App
 
 ## 2. Stoping the setup:

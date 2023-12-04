@@ -13,4 +13,4 @@ minikube image load landmund/postgres:20231120
 minikube image load landmund/nodejs:20231120
 
 # Call launch script
-bash ./kube-launch.sh
+bash ./kube-start.sh
