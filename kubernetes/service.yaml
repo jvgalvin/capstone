@@ -6,7 +6,20 @@ spec:
   selector:
     app: myapp
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 80
       targetPort: 8000
+      protocol: TCP
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-ui-service
+spec:
+  selector:
+    app: myapp
+  ports:
+    - port: 81
+      targetPort: 3000
+      protocol: TCP
   type: LoadBalancer

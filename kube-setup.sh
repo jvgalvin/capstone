@@ -1,17 +1,6 @@
 #!/bin/bash
 
-# Start minikube
-minikube start --driver=docker
-
-# Remove existing minikube images
-minikube image rm landmund/fastapi:20231120
-minikube image rm landmund/postgres:20231120
-minikube image rm landmund/nodejs:20231120
-
-# Remove local images
-docker rmi landmund/fastapi:20231120
-docker rmi landmund/postgres:20231120
-docker rmi landmund/nodejs:20231120
+bash ./kube-delete.sh
 
 # Build local images
 docker build . -t landmund/fastapi:20231120 -f project/Dockerfile
@@ -24,4 +13,4 @@ minikube image load landmund/postgres:20231120
 minikube image load landmund/nodejs:20231120
 
 # Call launch script
-bash ./launch-kube.sh
+bash ./kube-launch.sh
