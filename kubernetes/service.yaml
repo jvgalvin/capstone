@@ -6,8 +6,9 @@ spec:
   selector:
     app: myapp
   ports:
-    - port: 80
-      targetPort: 8000
+    - name: ingress
+      port: 80
+      targetPort: 3000
       protocol: TCP
   type: LoadBalancer
 ---
@@ -17,9 +18,9 @@ metadata:
   name: myapp-ui-service
 spec:
   selector:
-    app: myapp
+    app: nodejs
   ports:
-    - port: 81
-      targetPort: 3000
+    - port: 8000
+      targetPort: 8000
       protocol: TCP
   type: LoadBalancer

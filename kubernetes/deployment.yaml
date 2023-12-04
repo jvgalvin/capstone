@@ -34,8 +34,8 @@ spec:
       - name: db
         image: landmund/postgres:20231120
         ports:
-          - containerPort: 5432
-            name: "postgres"
+        - containerPort: 5432
+          name: "postgres"
         env:
           - name: POSTGRES_DB
             value: "alzheimer_predict"
