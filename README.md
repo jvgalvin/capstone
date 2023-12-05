@@ -36,3 +36,6 @@ Run [kube-stop.sh](kube-stop.sh) to delete the Kubernetes service and deployment
 
 ## 3. Delete the setup:
 Run [kube-delete.sh](kube-delete.sh) to unload images from Minikube and delete docker images.
+
+## 4. Stop Minikube cluster
+Run `minikube stop` to shut down the Minikube environment
