@@ -174,16 +174,72 @@ function Predictor() {
         <form onSubmit={handleSubmit}>
           <h2>Alzheimer's-Specific Information</h2>
           <div className="form-data">
-            <TextNumberInput input_type = 'T' name = 'Diagnosis_at_Baseline' input_text = 'Current Diagnosis (Enter CN for Normal, LMCI for Mild Cognitive Impairment):' handleChange={handleChange} value={Diagnosis_at_Baseline} />
+          <label>
+              <div class="d-flex flex-row mb-1">
+                <div className="input-label">
+                Current Diagnosis:
+                </div>
+                <div className="input-container">
+                  <select className="input-data" name= 'Diagnosis_at_Baseline' onChange={handleChange} ref={Diagnosis_at_Baseline}>
+                      <option selected value="" />
+                      <option value="CN">Normal Cognitive Function</option>
+                      <option value="LMCI">Mild Cognitive Impairment</option>
+                  </select>
+                </div>
+              </div>
+            </label>
             <TextNumberInput input_type = 'N' name = 'APOE4' input_text = 'Number of copies of the APOE4 allele (0-4):'handleChange={handleChange} value={APOE4} />
             <TextNumberInput input_type = 'N' name = 'MMSE' input_text = 'Most recent score on the Mini-Mental State Exam (MMSE):' handleChange={handleChange} value={MMSE} />
           </div>
           <h2>Additional Information</h2>
           <div className="form-data">
             <TextNumberInput input_type = 'N' name = 'Age'input_text = 'Age:' handleChange={handleChange} value={Age} />
-            <TextNumberInput input_type = 'T' name = 'Gender' input_text = 'Gender:' handleChange={handleChange} value={Gender} />
-            <TextNumberInput input_type = 'T' name = 'Race' input_text = 'Race:' handleChange={handleChange} value={Race} />
-            <TextNumberInput input_type = 'T' name = 'Ethnicity' input_text = 'Ethnicity:' handleChange={handleChange} value={Ethnicity} />
+            <label>
+              <div class="d-flex flex-row mb-1">
+                <div className="input-label">
+                  Gender:
+                </div>
+                <div className="input-container">
+                  <select className="input-data" name= 'Gender' onChange={handleChange} ref={Gender}>
+                      <option selected value="" />
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                  </select>
+                </div>
+              </div>
+            </label>
+            <label>
+              <div class="d-flex flex-row mb-1">
+                <div className="input-label">
+                  Race:
+                </div>
+                <div className="input-container">
+                  <select className="input-data" name= 'Race' onChange={handleChange} ref={Race}>
+                      <option selected value="" />
+                      <option value="White">White</option>
+                      <option value="Black">Black</option>
+                      <option value="Asian">Asian</option>
+                      <option value="Am Indian/Alaskan">Am Indian/Alaskan</option>
+                      <option value="Hawaiian/Other PI">Hawaiian/Other PI</option>
+                      <option value="More than one">More than one</option>
+                  </select>
+                </div>
+              </div>
+            </label>
+            <label>
+              <div class="d-flex flex-row mb-1">
+                <div className="input-label">
+                  Ethnicity:
+                </div>
+                <div className="input-container">
+                  <select className="input-data" name= 'Ethnicity' onChange={handleChange} ref={Ethnicity}>
+                      <option selected value="" />
+                      <option value="Hisp/Latino">Hisp/Latino</option>
+                      <option value="Not Hisp/Latino">Not Hisp/Latino</option>
+                  </select>
+                </div>
+              </div>
+            </label>
             <TextNumberInput input_type = 'N' name = 'Years_of_Education' input_text = 'Years of Education:' handleChange={handleChange} value={Years_of_Education} />
           </div>
           <div className="submit-container">
