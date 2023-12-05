@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: nodejs
-        image: landmund/nodejs:20231120
+        image: alzheimer/nodejs:20231120
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -25,7 +25,7 @@ spec:
             memory: 1Gi
             cpu: "2"
       - name: myapp
-        image: landmund/fastapi:20231120
+        image: alzheimer/fastapi:20231120
         ports:
         - containerPort: 8000
           protocol: TCP
@@ -36,7 +36,7 @@ spec:
             memory: 1Gi
             cpu: "2"
       - name: db
-        image: landmund/postgres:20231120
+        image: alzheimer/postgres:20231120
         ports:
         - containerPort: 5432
           name: "postgres"
