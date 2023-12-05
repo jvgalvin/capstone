@@ -11,6 +11,7 @@ import About from './pages/About';
 import Resources from './pages/Resources';
 import Error from './pages/Error';
 import Contact from './pages/Contact';
+import Privacy from './pages/Privacy';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -35,6 +36,10 @@ const router = createHashRouter([
       {
         path: '/contact',
         element: <Contact />,
+      },
+      {
+        path: '/privacy',
+        element: <Privacy />,
       },
     ],
   },
