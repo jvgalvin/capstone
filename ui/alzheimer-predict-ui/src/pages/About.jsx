@@ -10,7 +10,7 @@ import AlzheimerTableau from '../tableau/AlzheimerTableau'
 
 export default function About() {
   return (
-    <Accordion defaultActiveKey={['0']} alwaysOpen>
+    <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
       <Accordion.Item eventKey="0">
         <Accordion.Header>Mission</Accordion.Header>
         <Accordion.Body>

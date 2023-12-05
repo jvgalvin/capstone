@@ -59,7 +59,7 @@ class Record(BaseModel):
     Years_of_Education: int
     Ethnicity: str
     Race: str
-    ad_probability: int
+    ad_probability: float
     created_at: str
     updated_at: str
 
@@ -76,7 +76,7 @@ class InputRecord(BaseModel):
     Years_of_Education: int
     Ethnicity: str
     Race: str
-    ad_probability: int
+    ad_probability: float
 
 # Helper Methods
 def get_sql_connection():
