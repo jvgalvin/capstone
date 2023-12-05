@@ -27,6 +27,7 @@ Application for the detection of dementia in Alzheimer's patients
 - Delete the `node_modules` folder in the `ui/alzheimer-predict-ui` folder
 
 ## 1. Build images and load them to Minikube:
+- Navigate the the root folder `/capstone`
 - Run [kube-setup.sh](kube-setup.sh) to build the images and start up Kubernetes.
 - If the images have already been built and loaded to Minikube, run [kube-start.sh](kube-start.sh) instead
 - Open the following address in a browser window: `localhost:3000`
