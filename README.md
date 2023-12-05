@@ -24,18 +24,18 @@ Application for the detection of dementia in Alzheimer's patients
 
 ## 0. Prerequisites
 - Make sure that `minikube` is active (run `minikube start`)
-- Delete the `node_modules` folder in the `ui\alzheimer-predict-ui`
+- Delete the `node_modules` folder in the `ui/alzheimer-predict-ui` folder
 
 ## 1. Build images and load them to Minikube:
 - Run [kube-setup.sh](kube-setup.sh) to build the images and start up Kubernetes.
-- If the images have already been built and loaded to Minikube, run [kube-start.sh](kube-start.sh) instead.
+- If the images have already been built and loaded to Minikube, run [kube-start.sh](kube-start.sh) instead
 - Open the following address in a browser window: `localhost:3000`
 
 ## 2. Stoping the setup:
 Run [kube-stop.sh](kube-stop.sh) to delete the Kubernetes service and deployments
 
 ## 3. Delete the setup:
-Run [kube-delete.sh](kube-delete.sh) to unload images from Minikube and delete docker images.
+Run [kube-delete.sh](kube-delete.sh) to unload images from Minikube and delete docker images
 
 ## 4. Stop Minikube cluster
 Run `minikube stop` to shut down the Minikube environment
