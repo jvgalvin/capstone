@@ -18,18 +18,22 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+          hostPort: 3000
+          hostIP: 0.0.0.0 
         resources:
           limits:
-            memory: 4Gi
+            memory: 1Gi
             cpu: "2"
       - name: myapp
         image: landmund/fastapi:20231120
         ports:
         - containerPort: 8000
           protocol: TCP
+          hostPort: 8000
+          hostIP: 0.0.0.0 
         resources:
           limits:
-            memory: 4Gi
+            memory: 1Gi
             cpu: "2"
       - name: db
         image: landmund/postgres:20231120
@@ -45,5 +49,5 @@ spec:
             value: "12345678"
         resources:
           limits:
-            memory: 4Gi
+            memory: 1Gi
             cpu: "2"

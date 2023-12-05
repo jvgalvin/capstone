@@ -9,11 +9,16 @@ Application for the detection of dementia in Alzheimer's patients
 
 # How to build API and DB locally without containers:
 
+## Prerequisites
+- Make sure the that Node JS modules are installed by navigating to the `captsone/ui/alzheimer-predict-ui/` folder and running the `npm install` command
+
 ## Steps
 1. Navigate the the root folder `/capstone`
 2. Run the following command to start up the database: `bash setup-db.sh`
 3. Run the following command to start up the API: `uvicorn project.src.main:app`
-4. Copy the URL/link from the logs and run in a browser
+4. Navigate to the `captsone/ui/alzheimer-predict-ui/` folder
+5. Run the `npm start` command
+6. Open the following address in a browser window: `localhost:3000`
 
 # How to build containers and Kubernetes deployment
 
@@ -24,7 +29,7 @@ Application for the detection of dementia in Alzheimer's patients
 ## 1. Build images and load them to Minikube:
 - Run [kube-setup.sh](kube-setup.sh) to build the images and start up Kubernetes.
 - If the images have already been built and loaded to Minikube, run [kube-start.sh](kube-start.sh) instead.
-- Use the URL provided at the end to access the UI App
+- Open the following address in a browser window: `localhost:3000`
 
 ## 2. Stoping the setup:
 Run [kube-stop.sh](kube-stop.sh) to delete the Kubernetes service and deployments
