@@ -291,7 +291,7 @@ async def predict(id: str = None):
         # Generate prediction
         prediction = model.predict(arr)[0][0]*100
 
-        return {"ad_probability": prediction}
+        return {"ad_probability": round(prediction,2)}
     except HTTPException as e:
         connection.rollback()
         raise e
