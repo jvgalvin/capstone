@@ -1,0 +1,9 @@
+.form-background {
+    background-color: #EFD3E4;
+    background-image: url(https://mdbootstrap.com/img/Photos/new-templates/search-box/img1.jpg);
+}
+
+.card {
+    border-radius: 1rem;
+    width: 18rem;
+}
