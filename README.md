@@ -47,42 +47,26 @@ Please see the final presentation within the slides directory of this repository
 # Running the Application
 The instructions below describe how to run the application.
 
-### Prerequisites:
-- Make sure that the dependencies in [requirements.txt](./requirements.txt) are installed (a VS Code Devcontainer is recommended)
-- Make sure that minikube is installed
-- Make sure that your minikube is started (by running `minikube start`)
-- Make sure that 'node' and its module 'pg' are installed
+### Deploy to Minikube
+Run the following commands from the root directory (capstone). Note that these commands assume you have Minikube installed.
 
-# How to build API and DB locally without containers:
+    minikube start
+    sh kube-setup.sh
 
-## Prerequisites
-- Make sure the that Node JS modules are installed by navigating to the `captsone/ui/alzheimer-predict-ui/` folder and running the `npm install` command
+Once the images have been built, navigate to http://localhost:3000 in a web browswer to access the application. When you are finished, run the command below:
 
-## Steps
-1. Navigate the the root folder `/capstone`
-2. Run the following command to start up the database: `bash setup-db.sh`
-3. Run the following command to start up the API: `uvicorn project.src.main:app`
-4. Navigate to the `captsone/ui/alzheimer-predict-ui/` folder
-5. Run the `npm start` command
-6. Open the following address in a browser window: `localhost:3000`
+    sh kube-stop.sh
 
-# How to build containers and Kubernetes deployment
+### Build Manually (this will affect your local setup)
+It's recommended that you run these within a VS Code Devcontainer. Run these from the root directory (capstone).
 
-## 0. Prerequisites
-- Make sure that `minikube` is active (run `minikube start`)
-- Delete the `node_modules` folder in the `ui/alzheimer-predict-ui` folder
+    pip install -r requirements.txt
+    cd ui/alzheimer-predict-ui
+    npm install
+    cd ../../
+    sh setup-db.sh
+    uvicorn project.src.main:app
+    cd ui/alzheimer-predict-ui
+    npm start
 
-## 1. Build images and load them to Minikube:
-- Navigate the the root folder `/capstone`
-- Run [kube-setup.sh](kube-setup.sh) to build the images and start up Kubernetes.
-- If the images have already been built and loaded to Minikube, run [kube-start.sh](kube-start.sh) instead
-- Open the following address in a browser window: `localhost:3000`
-
-## 2. Stoping the setup:
-Run [kube-stop.sh](kube-stop.sh) to delete the Kubernetes service and deployments
-
-## 3. Delete the setup:
-Run [kube-delete.sh](kube-delete.sh) to unload images from Minikube and delete docker images
-
-## 4. Stop Minikube cluster
-Run `minikube stop` to shut down the Minikube environment
+Navigate to http://localhost:3000 in a web browswer to access the application.
