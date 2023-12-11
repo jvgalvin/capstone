@@ -14,6 +14,9 @@ export default function About() {
       <Accordion.Item eventKey="0">
         <Accordion.Header>Mission</Accordion.Header>
         <Accordion.Body>
+        <p><em><b>Improve health outcomes for Alzheimer’s patients and ease the burden of care through the use of machine learning for earlier diagnosis.</b></em></p>
+        <br></br>
+        <br></br>
         <p>Currently, 7 million Americans are living with Alzheimer's Disease, but the emotional and financial burden of this terrible disease extends far beyond this number. The disease is expected to cost the US over 1 trillion dollars by the year 2050, with family members and unpaid caregivers already providing over 340 billion dollars each year. We are here to reduce these numbers, and, more importantly, to improve patient care and outcomes.</p>
         <br></br>
         <p>With this complex disease, there is no simple diagnosis, but studies have shown that early diagnosis is key. With only 60% of physicians stating that they feel comfortable in their Alzheimer's diagnoses, there is an obvious need for additional tools to help guide physicians to make these calls.</p>
