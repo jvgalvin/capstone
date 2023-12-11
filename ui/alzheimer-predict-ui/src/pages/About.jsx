@@ -87,7 +87,7 @@ export default function About() {
           </CardGroup>
         </Accordion.Body>
       </Accordion.Item>
-      <Accordion.Item eventKey="0">
+      <Accordion.Item eventKey="2">
         <Accordion.Header>Training Data</Accordion.Header>
         <Accordion.Body>
           Training data was gathered from the Alzheimer's Disease Neuroimaging Initiative (ADNI). Complete information for the dataset can be found at <a href="https://adni.loni.usc.edu/about/" target="_blank">adni.loni.usc.edu</a>.
