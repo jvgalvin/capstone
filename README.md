@@ -73,6 +73,7 @@ Navigate to http://localhost:3000 in a web browswer to access the application.
 
 # Demo Video
 
+A complete demo video can be found at: (https://www.youtube.com/watch?v=D_dOtXs5guw)
 
 https://github.com/jvgalvin/capstone/assets/78283671/5186042e-2276-45a5-a7fc-d4174e809bc8
 
