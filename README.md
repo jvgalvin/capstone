@@ -72,4 +72,8 @@ It's recommended that you run these within a VS Code Devcontainer. Run these fro
 Navigate to http://localhost:3000 in a web browswer to access the application.
 
 # Demo Video
-(https://www.youtube.com/watch?v=D_dOtXs5guw)
+
+
+https://github.com/jvgalvin/capstone/assets/78283671/5186042e-2276-45a5-a7fc-d4174e809bc8
+
+
