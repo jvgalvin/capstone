@@ -278,7 +278,7 @@ def record(update_record: InputRecord):
 async def predict(id: str = None):
     try:
         connection = get_sql_connection()
-        # Pull Record for model
+        # Pull most recent Record for model
         record = query_db(connection, "SELECT * FROM records WHERE patient_id='{}' Order by created_at DESC limit 1;".format(id), fetch_all=False)
 
         # Error message if patient not found
